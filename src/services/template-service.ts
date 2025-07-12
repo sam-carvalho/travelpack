@@ -37,6 +37,8 @@ export class TemplateService {
     });
   }
 
+  // Applies a template to a trip by creating a new packing list
+  // with items from the template
   async applyTemplateToTrip(templateId: string, tripId: string) {
     const template = await prisma.template.findUnique({
       where: { id: templateId },

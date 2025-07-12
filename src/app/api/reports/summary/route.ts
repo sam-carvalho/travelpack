@@ -6,13 +6,11 @@ export async function GET() {
   const user = await getAuthorizedUser();
   if (user instanceof NextResponse) return user;
 
-  const service = new PackingSummaryReport(user.id, "Packing Summary Report");
-  const pdfBytes = await service.exportToPDF();
+  const report = new PackingSummaryReport(user.id, "Packing Summary Report");
+  await report.fetchData();
 
-  return new NextResponse(pdfBytes, {
-    headers: {
-      "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="packing-summary-report.pdf"`,
-    },
+  return NextResponse.json({
+    metadata: report.getMetadata(),
+    data: report.getTabularData(),
   });
 }
