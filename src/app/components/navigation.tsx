@@ -4,40 +4,47 @@ import { authOptions } from "@/app/lib/auth";
 
 export default async function Navigation() {
   const session = await getServerSession(authOptions);
+  const linkClasses = "hover:underline font-lg font-bold";
 
   return (
-    <header className="p-4 flex justify-between items-center">
-      <h1 className="text-2xl font-bold text-blue-900">
+    <header className="flex justify-between items-center">
+      <h1 className="text-2xl font-bold">
         <Link href="/">TravelPack</Link>
       </h1>
 
       <nav className="space-x-8">
         {session?.user ? (
           <>
-            <Link
-              href="/dashboard"
-              className="text-blue-900 hover:underline font-lg font-bold"
-            >
+            <Link href="/dashboard" className={linkClasses}>
               Dashboard
+            </Link>
+            <Link href="/trips" className={linkClasses}>
+              Trips
+            </Link>
+            <Link href="/templates" className={linkClasses}>
+              Templates
+            </Link>
+            <Link href="/reports" className={linkClasses}>
+              Reports
+            </Link>
+            <Link href="/profile" className={linkClasses}>
+              Profile
             </Link>
             <Link
               href="/auth/logout"
-              className="text-red-600 hover:underline font-lg font-bold"
+              className={`text-red-600 ${linkClasses} hover:text-red-800`}
             >
               Logout
             </Link>
           </>
         ) : (
           <>
-            <Link
-              href="/signin"
-              className="text-blue-900 hover:underline font-lg font-bold"
-            >
+            <Link href="/signin" className={linkClasses}>
               Sign In
             </Link>
             <Link
               href="/signup"
-              className="text-gray-600 hover:underline font-lg font-bold"
+              className={`text-gray-600 ${linkClasses} hover:text-gray-800`}
             >
               Sign Up
             </Link>

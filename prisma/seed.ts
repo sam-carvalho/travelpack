@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 const prisma = new PrismaClient();
 
 async function main() {
-  const password = await bcrypt.hash("test1234", 10);
+  const password = await bcrypt.hash("test1234!", 10);
 
   const user = await prisma.user.upsert({
     where: { email: "demo@travelpack.com" },
@@ -15,6 +15,20 @@ async function main() {
       password,
     },
   });
+
+  // Create default categories
+  const defaultCategories = ["Clothing", "Toiletries", "Electronics"];
+  const categories = await prisma.category.createMany({
+    data: defaultCategories.map((name) => ({ name, userId: user.id })),
+    skipDuplicates: true,
+  });
+
+  const categoryRecords = await prisma.category.findMany({
+    where: { userId: user.id },
+  });
+  const categoryMap = Object.fromEntries(
+    categoryRecords.map((c) => [c.name, c.id])
+  );
 
   const trip = await prisma.trip.create({
     data: {
@@ -43,6 +57,7 @@ async function main() {
         quantity: 5,
         packed: false,
         packingListId: packingList.id,
+        categoryId: categoryMap["Clothing"],
       },
       {
         name: "Toothbrush",
@@ -50,6 +65,7 @@ async function main() {
         quantity: 1,
         packed: false,
         packingListId: packingList.id,
+        categoryId: categoryMap["Toiletries"],
       },
       {
         name: "Laptop",
@@ -57,6 +73,7 @@ async function main() {
         quantity: 1,
         packed: true,
         packingListId: packingList.id,
+        categoryId: categoryMap["Electronics"],
       },
     ],
   });

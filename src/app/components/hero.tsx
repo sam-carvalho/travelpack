@@ -1,21 +1,31 @@
 import Image from "next/image";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/lib/auth";
+import Link from "next/link";
 
-export default function Hero() {
+export default async function Hero() {
+  const session = await getServerSession(authOptions);
+  const ctaClasses =
+    "inline-block mt-8 bg-gradient-to-r from-amber-500 to-pink-500 text-white px-10 py-4 rounded-lg text-lg font-semibold hover:to-pink-600 transition-all duration-300";
+
   return (
-    <section className="max-w-screen-xl mx-auto px-4 flex flex-col lg:flex-row items-center justify-between gap-16">
+    <section className="max-w-screen-xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-16">
       <div className="text-left flex-1">
-        <h1 className="text-6xl font-extrabold tracking-tight text-blue-900">
+        <h1 className="text-6xl font-extrabold tracking-tight">
           Simplify Your Travel Planning
         </h1>
-        <p className="mt-4 text-2xl text-blue-900">
+        <p className="mt-4 text-2xl">
           Organize your trips and packing lists like a pro.
         </p>
-        <a
-          href="/signup"
-          className="inline-block mt-8 bg-blue-900 text-white px-10 py-4 rounded-lg text-lg font-semibold hover:bg-blue-800 transition"
-        >
-          Get Started
-        </a>
+        {session?.user ? (
+          <Link href="/dashboard" className={ctaClasses}>
+            Get Started
+          </Link>
+        ) : (
+          <Link href="/signup" className={ctaClasses}>
+            Get Started
+          </Link>
+        )}
       </div>
 
       <div className="p-6 rounded-xl flex-1">

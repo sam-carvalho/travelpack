@@ -4,6 +4,7 @@ import prisma from "@/app/lib/prisma";
 import { hash } from "bcrypt";
 import { SignupFormSchema, FormState } from "@/app/lib/definitions";
 import { redirect } from "next/navigation";
+import { CategoryService } from "@/services/category-service";
 
 export async function createUser(state: FormState, formData: FormData) {
   const validatedFields = SignupFormSchema.safeParse({
@@ -30,13 +31,16 @@ export async function createUser(state: FormState, formData: FormData) {
 
     const hashedPassword = await hash(password, 10);
 
-    await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
       },
     });
+
+    const categoryService = new CategoryService();
+    await categoryService.setDefaultCategories(newUser.id);
   } catch (error) {
     console.error("User creation failed:", error);
     return {
