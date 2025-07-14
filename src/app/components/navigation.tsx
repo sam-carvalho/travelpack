@@ -15,9 +15,6 @@ export default async function Navigation() {
       <nav className="space-x-8">
         {session?.user ? (
           <>
-            <Link href="/dashboard" className={linkClasses}>
-              Dashboard
-            </Link>
             <Link href="/trips" className={linkClasses}>
               Trips
             </Link>

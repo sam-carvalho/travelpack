@@ -75,13 +75,11 @@ model Trip {
 }
 
 model PackingList {
-  id         String  @id @default(uuid())
-  name       String
-  tripId     String
-  trip       Trip    @relation(fields: [tripId], references: [id], onDelete: Cascade)
-  items      Item[]
-  isTemplate Boolean @default(false)
-  shareId    String? @unique @default(uuid())
+  id     String @id @default(uuid())
+  name   String
+  tripId String
+  trip   Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  items  Item[]
 }
 
 model Item {

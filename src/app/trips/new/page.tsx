@@ -1,12 +1,22 @@
-import { TripForm } from "@/app/components/trips/trip-form";
+import { CreateTripForm } from "@/app/components/trips/create-trip-form";
+import { getCurrentUser } from "@/app/lib/auth";
+import { redirect } from "next/navigation";
 
-export default function NewTripPage() {
+export default async function NewTripPage() {
+  let user;
+  try {
+    user = await getCurrentUser();
+  } catch (err) {
+    console.error(err);
+    redirect("/signin");
+  }
+
   return (
     <div className="mt-16 rounded-xl overflow-hidden shadow-lg bg-gradient-to-bl from-neutral-50 via-neutral-50 to-zinc-100">
       <div className="flex items-center justify-between p-12">
         <h2 className="text-2xl font-medium">Create a New Trip</h2>
       </div>
-      <TripForm />
+      <CreateTripForm userId={user.id} />
     </div>
   );
 }

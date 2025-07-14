@@ -1,12 +1,5 @@
 import prisma from "@/app/lib/prisma";
-
-interface CreateTripInput {
-  name: string;
-  destination: string;
-  startDate: Date;
-  endDate: Date;
-  notes?: string;
-}
+import { CreateTripInput } from "@/app/lib/types";
 
 export class TripService {
   async createTrip(userId: string, input: CreateTripInput) {

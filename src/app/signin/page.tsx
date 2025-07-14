@@ -12,7 +12,7 @@ export default function SignInPage() {
       signIn("credentials", {
         email: state.email,
         password: state.password,
-        callbackUrl: "/dashboard",
+        callbackUrl: "/trips",
       });
     }
   }, [state, pending]);

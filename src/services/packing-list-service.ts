@@ -17,6 +17,16 @@ export class PackingListService {
     });
   }
 
+  async getPackingListById(tripId: string, packingListId: string) {
+    return prisma.packingList.findFirst({
+      where: {
+        tripId,
+        id: packingListId,
+      },
+      include: { items: true },
+    });
+  }
+
   async updatePackingList(id: string, data: any) {
     return prisma.packingList.update({
       where: { id },

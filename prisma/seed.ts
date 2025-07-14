@@ -45,7 +45,6 @@ async function main() {
     data: {
       name: "Main Suitcase",
       tripId: trip.id,
-      isTemplate: false,
     },
   });
 

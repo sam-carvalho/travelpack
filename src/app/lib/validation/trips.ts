@@ -20,7 +20,7 @@ export const createTripSchema = z
   .superRefine((data, ctx) => {
     const start = new Date(data.startDate);
     const end = new Date(data.endDate);
-    if (start >= end) {
+    if (end < start) {
       ctx.addIssue({
         path: ["endDate"],
         code: z.ZodIssueCode.custom,

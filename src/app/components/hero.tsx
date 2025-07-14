@@ -18,7 +18,7 @@ export default async function Hero() {
           Organize your trips and packing lists like a pro.
         </p>
         {session?.user ? (
-          <Link href="/dashboard" className={ctaClasses}>
+          <Link href="/trips" className={ctaClasses}>
             Get Started
           </Link>
         ) : (

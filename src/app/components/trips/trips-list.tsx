@@ -3,6 +3,7 @@ import { TripService } from "@/services/trip-service";
 import { getCurrentUser } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
 import { deleteTripAction } from "@/app/trips/actions";
+import React from "react";
 
 export default async function TripsList() {
   let user;
@@ -10,7 +11,7 @@ export default async function TripsList() {
     user = await getCurrentUser();
   } catch (err) {
     console.error(err);
-    redirect("/login");
+    redirect("/signin");
   }
   const service = new TripService();
   const trips = await service.getTripsByUser(user.id);
@@ -38,8 +39,8 @@ export default async function TripsList() {
         </thead>
         <tbody className="bg-white divide-y divide-gray-100">
           {trips.map((trip) => (
-            <>
-              <tr key={trip.id} className="hover:bg-gray-50 transition">
+            <React.Fragment key={trip.id}>
+              <tr className="hover:bg-gray-50 transition">
                 <td className="px-6 py-4 font-bold text-gray-800">
                   {trip.name}
                 </td>
@@ -76,7 +77,6 @@ export default async function TripsList() {
                     </Link>
                     <form
                       action={deleteTripAction.bind(null, user.id, trip.id)}
-                      method="POST"
                     >
                       <button
                         type="submit"
@@ -88,7 +88,7 @@ export default async function TripsList() {
                   </div>
                 </td>
               </tr>
-            </>
+            </React.Fragment>
           ))}
         </tbody>
       </table>
