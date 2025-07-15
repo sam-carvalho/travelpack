@@ -8,6 +8,8 @@ import { PackingCheckbox } from "./packing-checkbox";
 
 export default async function ViewPackingList({ list }: { list: PackingList }) {
   const { totalCount, progress } = getProgressCounts(list);
+  const progressBarColor = progress > 0 ? "bg-blue-600" : "bg-gray-200";
+
   return (
     <div className="overflow-x-auto px-12 pb-12">
       <table className="w-full rounded-lg border border-gray-200 divide-y divide-gray-200">
@@ -31,7 +33,7 @@ export default async function ViewPackingList({ list }: { list: PackingList }) {
           {list.items?.map((item) => (
             <React.Fragment key={item.id}>
               <tr className="hover:bg-gray-50 transition">
-                <td className="px-6 py-4 font-semibold text-gray-800">
+                <td className="px-6 py-4 font-semibold text-gray-800 items-center">
                   <PackingCheckbox
                     defaultChecked={item.packed}
                     tripId={list.tripId}
@@ -77,11 +79,16 @@ export default async function ViewPackingList({ list }: { list: PackingList }) {
           + Add Item
         </Link>
         {totalCount > 0 && (
-          <div className="w-1/3 h-4 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-blue-600 transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
+          <div className="w-1/3 flex flex-col items-center gap-2">
+            <div className="w-full h-6 bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className={`h-full transition-all duration-300 text-white flex justify-end pr-2 items-center ${progressBarColor}`}
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <span className="text-md font-medium text-gray-800">
+              {progress} %
+            </span>
           </div>
         )}
       </div>

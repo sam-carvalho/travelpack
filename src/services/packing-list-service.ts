@@ -18,13 +18,21 @@ export class PackingListService {
   }
 
   async getPackingListById(tripId: string, packingListId: string) {
-    return prisma.packingList.findFirst({
-      where: {
-        tripId,
-        id: packingListId,
-      },
-      include: { items: true },
+    const packingList = await prisma.packingList.findFirst({
+      where: { tripId, id: packingListId },
     });
+
+    if (!packingList) return null;
+
+    const items = await prisma.item.findMany({
+      where: { packingListId },
+      orderBy: { name: "asc" },
+    });
+
+    return {
+      ...packingList,
+      items,
+    };
   }
 
   async updatePackingList(id: string, data: any) {
