@@ -7,12 +7,21 @@ import { getCurrentUser } from "@/app/lib/auth";
 import { CreateTemplateButton } from "@/app/components/lists/create-template-button";
 import { ExportPDFButton } from "@/app/components/lists/export-pdf-button";
 import { ExportShareLinkButton } from "@/app/components/lists/share-button";
+import { redirect } from "next/navigation";
 
 export default async function ViewPackingListPage({
   params,
 }: {
   params: Promise<{ id: string; listId: string }>;
 }) {
+  let user;
+  try {
+    user = await getCurrentUser();
+  } catch (err) {
+    console.error(err);
+    redirect("/signin");
+  }
+
   const { id, listId } = await params;
   const service = new PackingListService();
   const list = await service.getPackingListById(id, listId);
@@ -20,8 +29,6 @@ export default async function ViewPackingListPage({
   if (!list) {
     return <p className="p-12">No lists available. Start by creating one.</p>;
   }
-
-  const user = await getCurrentUser();
 
   return (
     <div className="mt-10 rounded-xl overflow-hidden shadow-lg bg-zinc-50">

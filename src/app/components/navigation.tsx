@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/lib/auth";
+import { LogoutButton } from "./logout-button";
 
 export default async function Navigation() {
   const session = await getServerSession(authOptions);
@@ -27,12 +28,7 @@ export default async function Navigation() {
             <Link href="/profile" className={linkClasses}>
               Profile
             </Link>
-            <Link
-              href="/auth/logout"
-              className={`text-red-600 ${linkClasses} hover:text-red-800`}
-            >
-              Logout
-            </Link>
+            <LogoutButton />
           </>
         ) : (
           <>
