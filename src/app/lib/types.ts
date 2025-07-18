@@ -1,3 +1,5 @@
+import { DateTime } from "next-auth/providers/kakao";
+
 export interface ReportRecord {
   label: string;
   count: number;
@@ -30,7 +32,30 @@ export interface PackingList {
 export interface PackingListItem {
   id: string;
   name: string;
-  category: string;
+  category?: Category;
+  categoryId?: string | null;
   quantity: number;
   packed: boolean;
+  packingListId: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  userId: string;
+}
+
+export interface Option {
+  readonly label: string;
+  readonly value: string;
+}
+
+export interface CategorySelectProps {
+  userId: string;
+  tripId: string;
+  packingListId: string;
+  onChange: (category: Option | null) => void;
+  categories?: Category[];
+  className?: string;
+  value: Option | null;
 }

@@ -3,8 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { PackingListService } from "@/services/packing-list-service";
-import it from "zod/v4/locales/it.cjs";
 import { ItemService } from "@/services/item-service";
+import { CategoryService } from "@/services/category-service";
+import { formatOption } from "@/app/utils/formatSelectOption";
+import { TemplateService } from "@/services/template-service";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { PackingList, PackingListItem } from "@/app/lib/types";
+import { TripService } from "@/services/trip-service";
 
 // const CreateTrip = createPackingListSchema.omit({ id: true });
 
@@ -61,14 +66,13 @@ export async function deletePackingListAction(
 
 export async function deletePackingListItemAction(
   tripId: string,
-  packingListId: string,
-  itemId: string
+  itemId: string,
+  packingListId: string
 ) {
   const service = new ItemService();
   await service.deleteItem(itemId);
 
-  revalidatePath(`/trips/${tripId}/packing-lists`);
-  redirect(`/trips/${tripId}/packing-lists`);
+  revalidatePath(`/trips/${tripId}/packing-lists/${packingListId}`);
 }
 
 export async function togglePackedAction(formData: FormData) {
@@ -81,4 +85,214 @@ export async function togglePackedAction(formData: FormData) {
   await service.updateItem(itemId, { packed });
 
   revalidatePath(`/trips/${tripId}/packing-lists/${packingListId}`);
+}
+
+export async function addPackingItemAction(
+  tripId: string,
+  packingListId: string,
+  input: { name: string; quantity: number; categoryId?: string }
+) {
+  const service = new ItemService();
+  await service.addItem(packingListId, {
+    name: input.name,
+    quantity: input.quantity,
+    categoryId: input.categoryId,
+    packed: false,
+    packingListId,
+  });
+  revalidatePath(`/trips/${tripId}/packing-lists/${packingListId}`);
+}
+
+export async function createCategoryAction(
+  userId: string,
+  name: string,
+  tripId: string,
+  packingListId: string
+) {
+  const service = new CategoryService();
+  const existing = await service.getCategoryByName(userId, name);
+  if (existing) return formatOption(name, existing.id);
+  const newCategory = await service.createCategory(userId, name);
+  revalidatePath(`/trips/${tripId}/packing-lists/${packingListId}`);
+  return formatOption(name, newCategory.id);
+}
+
+export async function createTemplateAction(
+  userId: string,
+  packingListName: string,
+  packingListId: string
+) {
+  const service = new TemplateService();
+  const template = await service.createTemplate(
+    userId,
+    packingListId,
+    packingListName
+  );
+  revalidatePath(`/templates`);
+  return template;
+}
+
+export async function exportPackingListPdf(
+  tripId: string,
+  packingListId: string
+) {
+  const service = new PackingListService();
+  const packingList = await service.getPackingListById(tripId, packingListId);
+  if (!packingList) throw new Error("Packing list not found.");
+
+  const pdfDoc = await PDFDocument.create();
+  let page = pdfDoc.addPage();
+  const { width, height } = page.getSize();
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  const fontSize = 12;
+
+  let y = height - 50;
+  const rowHeight = 24;
+
+  const tableX = 50;
+  const colWidths = [60, 180, 80, 180];
+  const colX = {
+    packed: tableX,
+    name: tableX + colWidths[0],
+    quantity: tableX + colWidths[0] + colWidths[1],
+    category: tableX + colWidths[0] + colWidths[1] + colWidths[2],
+  };
+
+  // Title
+  page.drawText(`Packing List: ${packingList.name}`, {
+    x: tableX,
+    y,
+    size: 18,
+    font: boldFont,
+    color: rgb(0, 0.53, 0.71),
+  });
+
+  y -= 30;
+
+  // Header background
+  page.drawRectangle({
+    x: tableX,
+    y: y - rowHeight + 6,
+    width: colWidths.reduce((sum, w) => sum + w, 0),
+    height: rowHeight,
+    color: rgb(0.95, 0.95, 0.95),
+  });
+
+  // Header labels
+  page.drawText("Packed", {
+    x: colX.packed,
+    y: y + 6,
+    size: fontSize,
+    font: boldFont,
+  });
+  page.drawText("Item Name", {
+    x: colX.name + 6,
+    y,
+    size: fontSize,
+    font: boldFont,
+  });
+  page.drawText("Quantity", {
+    x: colX.quantity + 6,
+    y,
+    size: fontSize,
+    font: boldFont,
+  });
+  page.drawText("Category", {
+    x: colX.category + 6,
+    y,
+    size: fontSize,
+    font: boldFont,
+  });
+
+  y -= rowHeight;
+
+  packingList.items.forEach((item) => {
+    // Draw row background
+    page.drawRectangle({
+      x: tableX,
+      y: y - rowHeight + 6,
+      width: colWidths.reduce((sum, w) => sum + w, 0),
+      height: rowHeight,
+      borderWidth: 0.5,
+      color: rgb(1, 1, 1),
+      borderColor: rgb(0.8, 0.8, 0.8),
+    });
+
+    // ✅ Draw checkbox (manual checkable square)
+    page.drawRectangle({
+      x: colX.packed + 6,
+      y: y - 10, // vertical alignment
+      width: 10,
+      height: 10,
+      borderColor: rgb(0.2, 0.2, 0.2),
+      borderWidth: 1,
+      color: rgb(1, 1, 1), // white fill
+    });
+
+    // Text cells
+    page.drawText(item.name, {
+      x: colX.name + 6,
+      y,
+      size: fontSize,
+      font,
+      color: rgb(0, 0, 0),
+    });
+
+    page.drawText(String(item.quantity), {
+      x: colX.quantity + 6,
+      y,
+      size: fontSize,
+      font,
+      color: rgb(0, 0, 0),
+    });
+
+    page.drawText(item.category?.name || "—", {
+      x: colX.category + 6,
+      y,
+      size: fontSize,
+      font,
+      color: rgb(0, 0, 0),
+    });
+
+    y -= rowHeight;
+
+    // 📄 Pagination: add a new page if needed
+    if (y < 50) {
+      page = pdfDoc.addPage();
+      y = height - 50;
+    }
+  });
+
+  const pdfBytes = await pdfDoc.save();
+
+  return new Response(pdfBytes, {
+    headers: {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename="${packingList.name}.pdf"`,
+    },
+  });
+}
+
+export async function exportPackingListToLink(
+  userId: string,
+  list: PackingList
+) {
+  const tripService = new TripService();
+  const trip = await tripService.getTripById(userId, list.tripId);
+  if (trip) {
+    const { destination, startDate, endDate, notes } = trip;
+    const { name, items } = list;
+
+    const listService = new PackingListService();
+    return await listService.exportPackingList({
+      title: trip.name,
+      name,
+      destination,
+      startDate,
+      endDate,
+      notes: notes ?? "",
+      items,
+    });
+  }
 }

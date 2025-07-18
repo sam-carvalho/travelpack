@@ -1,16 +1,25 @@
 import prisma from "@/app/lib/prisma";
+import { ItemService } from "./item-service";
 
 export class TemplateService {
-  async createTemplate(userId: string, data: any) {
+  async createTemplate(
+    userId: string,
+    packingListId: string,
+    packingListName: string
+  ) {
+    const service = new ItemService();
+    const items = await service.getItemsByPackingList(packingListId);
+
     return prisma.template.create({
       data: {
-        name: data.name,
+        name: packingListName,
         userId,
         items: {
-          create: data.items.map((item: any) => ({
+          create: items.map((item: any) => ({
             name: item.name,
             category: item.category,
             quantity: item.quantity,
+            categoryId: item.categoryId,
           })),
         },
       },
@@ -54,7 +63,7 @@ export class TemplateService {
         items: {
           create: template.items.map((item) => ({
             name: item.name,
-            category: item.category ?? "No Category",
+            category: item.categoryId,
             quantity: item.quantity,
           })),
         },

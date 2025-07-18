@@ -3,6 +3,10 @@ import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { PackingListService } from "@/services/packing-list-service";
 import { deletePackingListAction } from "../actions";
 import ViewPackingList from "@/app/components/lists/view-list";
+import { getCurrentUser } from "@/app/lib/auth";
+import { CreateTemplateButton } from "@/app/components/lists/create-template-button";
+import { ExportPDFButton } from "@/app/components/lists/export-pdf-button";
+import { ExportShareLinkButton } from "@/app/components/lists/share-button";
 
 export default async function ViewPackingListPage({
   params,
@@ -14,8 +18,10 @@ export default async function ViewPackingListPage({
   const list = await service.getPackingListById(id, listId);
 
   if (!list) {
-    return <p className="px-12 pb-12">Oh no! Trip not found.</p>;
+    return <p className="p-12">No lists available. Start by creating one.</p>;
   }
+
+  const user = await getCurrentUser();
 
   return (
     <div className="mt-10 rounded-xl overflow-hidden shadow-lg bg-zinc-50">
@@ -30,24 +36,17 @@ export default async function ViewPackingListPage({
           <h1 className="text-2xl font-medium">{list.name}</h1>
         </div>
         <div className="flex items-center space-x-4">
-          <Link
-            href={`/trips/${list.id}/packing-lists/${list.id}/share`}
-            className="px-4 py-2 text-sm font-medium border border-gray-300 bg-gray-50 rounded-lg hover:bg-gray-100"
-          >
-            Share
-          </Link>
-          <Link
-            href={`/trips/${list.id}/packing-lists/${list.id}/export-pdf`}
-            className="px-4 py-2 text-sm font-medium border border-gray-300 bg-gray-50 rounded-lg hover:bg-gray-100"
-          >
-            Export PDF
-          </Link>
-          <Link
-            href={`/trips/${list.id}/packing-lists`}
-            className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-amber-500 to-pink-500 text-white rounded-lg hover:to-pink-800 transition-all duration-300"
-          >
-            Save Template
-          </Link>
+          <ExportShareLinkButton userId={user.id} list={list} />
+          <ExportPDFButton
+            tripId={list.tripId}
+            packingListId={list.id}
+            packingListName={list.name}
+          />
+          <CreateTemplateButton
+            userId={user.id}
+            packingListName={list.name}
+            packingListId={listId}
+          />
         </div>
       </div>
       <ViewPackingList list={list} />

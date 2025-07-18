@@ -35,7 +35,7 @@ export class SearchService {
         },
         OR: [
           { name: { contains: query, mode: "insensitive" } },
-          { category: { contains: query, mode: "insensitive" } },
+          //{ category: { contains: query, mode: "insensitive" } },
         ],
       },
       include: {
@@ -62,7 +62,7 @@ export class SearchService {
           },
         },
         OR: [
-          { category: { contains: query, mode: "insensitive" } },
+          //{ category: { contains: query, mode: "insensitive" } },
           { name: { contains: query, mode: "insensitive" } },
         ],
       },

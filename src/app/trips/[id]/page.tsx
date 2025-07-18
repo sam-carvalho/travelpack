@@ -22,7 +22,7 @@ export default async function ViewTripPage({
   const trip = await service.getTripById(user.id, id);
 
   if (!trip) {
-    return <p className="px-12 pb-12">Oh no! Trip not found.</p>;
+    return <p className="p-12">Oh no! Trip not found.</p>;
   }
 
   return (

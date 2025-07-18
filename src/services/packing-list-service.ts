@@ -1,4 +1,6 @@
 import prisma from "@/app/lib/prisma";
+import { PackingListItem } from "@/app/lib/types";
+import { Prisma } from "@/generated/prisma/client";
 
 export class PackingListService {
   async createPackingList(tripId: string, data: any) {
@@ -26,6 +28,9 @@ export class PackingListService {
 
     const items = await prisma.item.findMany({
       where: { packingListId },
+      include: {
+        category: true,
+      },
       orderBy: { name: "asc" },
     });
 
@@ -45,6 +50,45 @@ export class PackingListService {
   async deletePackingList(id: string) {
     return prisma.packingList.delete({
       where: { id },
+    });
+  }
+
+  async exportPackingList({
+    title,
+    name,
+    destination,
+    startDate,
+    endDate,
+    notes,
+    items,
+  }: {
+    title: string;
+    name: string;
+    destination: string;
+    startDate: Date;
+    endDate: Date;
+    notes?: string;
+    items?: PackingListItem[];
+  }) {
+    const shared = await prisma.sharedPackingList.create({
+      data: {
+        title,
+        name,
+        destination,
+        startDate,
+        endDate,
+        notes,
+        items: items as unknown as Prisma.InputJsonValue,
+      },
+    });
+
+    const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
+    return `https://${baseUrl}/import?listId=${shared.id}`;
+  }
+
+  async getExportedPackingListById(listId: string) {
+    return await prisma.sharedPackingList.findUnique({
+      where: { id: listId },
     });
   }
 }

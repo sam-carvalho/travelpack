@@ -10,6 +10,12 @@ export class ItemService {
     });
   }
 
+  async addManyItems(data: any) {
+    await prisma.item.createMany({
+      data,
+    });
+  }
+
   async updateItem(id: string, data: any) {
     return prisma.item.update({
       where: { id },
@@ -26,6 +32,9 @@ export class ItemService {
   async getItemsByPackingList(packingListId: string) {
     return prisma.item.findMany({
       where: { packingListId },
+      include: {
+        category: true,
+      },
     });
   }
 }

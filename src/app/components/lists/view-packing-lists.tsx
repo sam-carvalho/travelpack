@@ -8,6 +8,16 @@ export default async function PackingLists({
 }: {
   lists: PackingList[];
 }) {
+  if (!lists) {
+    return (
+      <p className="p-12">
+        {" "}
+        No items found in this packing list. Use a{" "}
+        <Link href="/templates">template</Link> to create one or start by adding
+        items!
+      </p>
+    );
+  }
   return (
     <div className="overflow-x-auto px-12 pb-12">
       <table className="w-full rounded-lg border border-gray-200 divide-y divide-gray-200">

@@ -85,22 +85,34 @@ model PackingList {
 model Item {
   id            String      @id @default(uuid())
   name          String
-  category      String
   quantity      Int
   packed        Boolean     @default(false)
   packingListId String
   packingList   PackingList @relation(fields: [packingListId], references: [id], onDelete: Cascade)
-  Category      Category?   @relation(fields: [categoryId], references: [id])
+  category      Category?   @relation(fields: [categoryId], references: [id])
   categoryId    String?
 }
 
 model Category {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
-  Item      Item[]
+  id           String         @id @default(uuid())
+  name         String         @unique
+  userId       String
+  user         User           @relation(fields: [userId], references: [id])
+  createdAt    DateTime       @default(now())
+  items        Item[]
+  TemplateItem TemplateItem[]
+}
+
+model SharedPackingList {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  title       String
+  name        String
+  destination String
+  startDate   DateTime
+  endDate     DateTime
+  notes       String?
+  items       Json
 }
 
 model Template {
@@ -113,10 +125,11 @@ model Template {
 }
 
 model TemplateItem {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   name       String
-  category   String?
   quantity   Int
   templateId String
-  template   Template @relation(fields: [templateId], references: [id])
+  template   Template  @relation(fields: [templateId], references: [id])
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
 }

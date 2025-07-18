@@ -10,6 +10,12 @@ export class CategoryService {
     });
   }
 
+  async getCategoryByName(userId: string, name: string) {
+    return prisma.category.findFirst({
+      where: { name, userId },
+    });
+  }
+
   async getAllCategories(userId: string) {
     return prisma.category.findMany({
       where: { userId },
