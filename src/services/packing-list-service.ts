@@ -1,9 +1,9 @@
 import prisma from "@/app/lib/prisma";
 import { PackingListItem } from "@/app/lib/types";
-import { Prisma } from "@/generated/prisma/client";
+import { PackingList, Prisma } from "@/generated/prisma/client";
 
 export class PackingListService {
-  async createPackingList(tripId: string, data: any) {
+  async createPackingList(tripId: string, data: Omit<PackingList, "id">) {
     return prisma.packingList.create({
       data: {
         ...data,
@@ -40,7 +40,7 @@ export class PackingListService {
     };
   }
 
-  async updatePackingList(id: string, data: any) {
+  async updatePackingList(id: string, data: Partial<PackingList>) {
     return prisma.packingList.update({
       where: { id },
       data,

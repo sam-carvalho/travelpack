@@ -24,12 +24,22 @@ export class CategoryService {
   }
 
   async setDefaultCategories(userId: string) {
-    const defaultCategories = ["Clothing", "Electronics", "Toiletries"];
+    const defaultCategories = [
+      "Clothing",
+      "Electronics",
+      "Toiletries",
+      "Travel Documents",
+    ];
 
-    await prisma.category.createMany({
-      data: defaultCategories.map((name) => ({ name, userId })),
-      skipDuplicates: true,
-    });
+    try {
+      await prisma.category.createMany({
+        data: defaultCategories.map((name) => ({ name, userId })),
+        skipDuplicates: true,
+      });
+    } catch (error) {
+      console.error("Failed to create default categories:", error);
+      throw new Error("Unable to create default categories.");
+    }
   }
 
   async deleteCategory(userId: string, categoryId: string) {

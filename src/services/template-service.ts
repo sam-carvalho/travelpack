@@ -1,5 +1,6 @@
 import prisma from "@/app/lib/prisma";
 import { ItemService } from "./item-service";
+import { PackingListItem } from "@/app/lib/types";
 
 export class TemplateService {
   async createTemplate(
@@ -15,7 +16,7 @@ export class TemplateService {
         name: packingListName,
         userId,
         items: {
-          create: items.map((item: any) => ({
+          create: items.map((item: PackingListItem) => ({
             name: item.name,
             category: item.category,
             quantity: item.quantity,

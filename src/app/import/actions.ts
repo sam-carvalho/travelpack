@@ -1,6 +1,6 @@
 "use server";
 
-import { SharedPackingList } from "@/generated/prisma";
+import { Item, SharedPackingList } from "@/generated/prisma";
 import { ItemService } from "@/services/item-service";
 import { PackingListService } from "@/services/packing-list-service";
 import { TripService } from "@/services/trip-service";
@@ -20,11 +20,11 @@ export async function importPackingList(
 
   const packingListService = new PackingListService();
   const newList = await packingListService.createPackingList(trip.id, {
-    name: `Imported: ${sharedList.name}`,
+    name: `Imported List: ${sharedList.name}`,
     tripId: trip.id,
   });
 
-  const items = (sharedList.items as any[]).map((item) => ({
+  const items = (sharedList.items as Item[]).map((item) => ({
     name: item.name,
     quantity: item.quantity,
     categoryId: item.categoryId ?? null,

@@ -1,7 +1,8 @@
 import prisma from "@/app/lib/prisma";
+import { Item } from "@/generated/prisma";
 
 export class ItemService {
-  async addItem(packingListId: string, data: any) {
+  async addItem(packingListId: string, data: Omit<Item, "id">) {
     return prisma.item.create({
       data: {
         ...data,
@@ -10,13 +11,13 @@ export class ItemService {
     });
   }
 
-  async addManyItems(data: any) {
+  async addManyItems(data: Omit<Item, "id">[]) {
     await prisma.item.createMany({
       data,
     });
   }
 
-  async updateItem(id: string, data: any) {
+  async updateItem(id: string, data: Partial<Item>) {
     return prisma.item.update({
       where: { id },
       data,

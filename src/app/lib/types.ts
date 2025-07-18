@@ -1,5 +1,3 @@
-import { DateTime } from "next-auth/providers/kakao";
-
 export interface ReportRecord {
   label: string;
   count: number;
@@ -27,16 +25,18 @@ export interface PackingList {
   id: string;
   name: string;
   tripId: string;
-  items?: PackingListItem[];
+  items?: PackingListBaseItem[];
 }
-export interface PackingListItem {
-  id: string;
+export interface PackingListItem extends PackingListBaseItem {
+  category?: Category | null;
+}
+
+export interface PackingListBaseItem {
   name: string;
-  category?: Category;
-  categoryId?: string | null;
   quantity: number;
   packed: boolean;
   packingListId: string;
+  categoryId: string | null;
 }
 
 export interface Category {

@@ -26,7 +26,7 @@ export class TripService {
   }
 
   async getTripById(userId: string, tripId: string) {
-    return prisma.trip.findFirst({
+    const trip = await prisma.trip.findFirst({
       where: {
         id: tripId,
         userId,
@@ -39,6 +39,12 @@ export class TripService {
         },
       },
     });
+
+    if (!trip || trip.userId !== userId) {
+      throw new Error("Trip not found or access denied.");
+    }
+
+    return trip;
   }
 
   async updateTrip(

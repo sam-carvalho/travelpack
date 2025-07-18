@@ -8,7 +8,7 @@ import { CategoryService } from "@/services/category-service";
 import { formatOption } from "@/app/utils/formatSelectOption";
 import { TemplateService } from "@/services/template-service";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
-import { PackingList, PackingListItem } from "@/app/lib/types";
+import { PackingList } from "@/app/lib/types";
 import { TripService } from "@/services/trip-service";
 
 // const CreateTrip = createPackingListSchema.omit({ id: true });
@@ -96,7 +96,7 @@ export async function addPackingItemAction(
   await service.addItem(packingListId, {
     name: input.name,
     quantity: input.quantity,
-    categoryId: input.categoryId,
+    categoryId: input.categoryId ?? null,
     packed: false,
     packingListId,
   });
@@ -142,7 +142,7 @@ export async function exportPackingListPdf(
 
   const pdfDoc = await PDFDocument.create();
   let page = pdfDoc.addPage();
-  const { width, height } = page.getSize();
+  const { height } = page.getSize();
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
   const fontSize = 12;

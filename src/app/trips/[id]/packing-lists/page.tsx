@@ -10,9 +10,8 @@ export default async function ViewPackingListsPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  let user;
   try {
-    user = await getCurrentUser();
+    await getCurrentUser();
   } catch (err) {
     console.error(err);
     redirect("/signin");
