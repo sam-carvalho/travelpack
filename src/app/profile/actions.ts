@@ -1,6 +1,7 @@
 "use server";
 
 import { CategoryService } from "@/services/category-service";
+import { TemplateService } from "@/services/template-service";
 import { UserService } from "@/services/user-service";
 import { hash } from "bcrypt";
 import { revalidatePath } from "next/cache";
@@ -73,6 +74,13 @@ export async function updateCategoryAction(
 export async function deleteCategoryAction(userId: string, categoryId: string) {
   const service = new CategoryService();
   await service.deleteCategory(userId, categoryId);
+
+  revalidatePath("/profile");
+}
+
+export async function deleteTemplateAction(userId: string, templateId: string) {
+  const service = new TemplateService();
+  await service.deleteTemplate(userId, templateId);
 
   revalidatePath("/profile");
 }

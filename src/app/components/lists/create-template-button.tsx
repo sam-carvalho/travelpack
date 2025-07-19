@@ -19,8 +19,8 @@ export function CreateTemplateButton({
     startTransition(async () => {
       const template = await createTemplateAction(
         userId,
-        packingListId,
         packingListName,
+        packingListId,
       );
       if (template) toast.success("Template created!");
     });

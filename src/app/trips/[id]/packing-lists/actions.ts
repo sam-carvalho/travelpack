@@ -11,6 +11,7 @@ import { PackingList } from "@/app/lib/types";
 import { TripService } from "@/services/trip-service";
 import { z } from "zod";
 import { getCurrentUser } from "@/app/lib/auth";
+import { Item } from "@/generated/prisma";
 
 const PackingListSchema = z.object({
   title: z.string().min(1),
@@ -38,13 +39,35 @@ export async function createPackingList(_: unknown, formData: FormData) {
     return { message: "Trip not found or unauthorized." };
   }
 
-  const data = { name: title, tripId };
-
   const listService = new PackingListService();
-  const list = await listService.createPackingList(tripId, data);
+  const newList = await listService.createPackingList(tripId, {
+    name: `From Template: ${title}`,
+    tripId,
+  });
 
-  revalidatePath(`/trips/${tripId}/packing-lists/${list.id}`);
-  redirect(`/trips/${tripId}/packing-lists/${list.id}`);
+  const templateId = formData.get("templateId")?.toString();
+  if (templateId) {
+    const templateService = new TemplateService();
+    const itemService = new ItemService();
+
+    const template = await templateService.getTemplateById(user.id, templateId);
+    if (template && template.items.length > 0) {
+      const items = template.items.map((item) => ({
+        name: item.name,
+        quantity: item.quantity,
+        categoryId: item.categoryId ?? null,
+        packed: false,
+        packingListId: newList.id,
+      }));
+
+      console.log("items", items);
+
+      await itemService.addManyItems(items);
+    }
+  }
+
+  revalidatePath(`/trips/${tripId}/packing-lists/${newList.id}`);
+  redirect(`/trips/${tripId}/packing-lists/${newList.id}`);
 }
 
 export async function updatePackingList(id: string, formData: FormData) {
@@ -166,7 +189,6 @@ export async function createTemplateAction(
     packingListId,
     packingListName,
   );
-  revalidatePath(`/templates`);
   return template;
 }
 

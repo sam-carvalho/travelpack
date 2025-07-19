@@ -61,7 +61,7 @@ export default async function PackingLists({
                       >
                         <button
                           type="submit"
-                          className="rounded-md border border-red-300 px-3 py-1 text-sm text-red-600 hover:bg-red-50"
+                          className="cursor-pointer rounded-md border border-red-300 px-3 py-1 text-sm text-red-600 hover:bg-red-50"
                         >
                           Delete
                         </button>

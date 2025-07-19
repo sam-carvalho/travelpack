@@ -1,6 +1,6 @@
 import prisma from "@/app/lib/prisma";
 import { ItemService } from "./item-service";
-import { PackingListItem } from "@/app/lib/types";
+import { Item } from "@/generated/prisma";
 
 export class TemplateService {
   async createTemplate(
@@ -11,17 +11,23 @@ export class TemplateService {
     const service = new ItemService();
     const items = await service.getItemsByPackingList(packingListId);
 
+    const itemsData = (items as Item[]).map((item) => ({
+      name: item.name,
+      quantity: item.quantity,
+      categoryId: item.categoryId ?? null,
+    }));
+
     return prisma.template.create({
       data: {
         name: packingListName,
         userId,
         items: {
-          create: items.map((item: PackingListItem) => ({
-            name: item.name,
-            category: item.category,
-            quantity: item.quantity,
-            categoryId: item.categoryId,
-          })),
+          create: itemsData,
+        },
+      },
+      include: {
+        items: {
+          include: { category: true },
         },
       },
     });
@@ -34,14 +40,14 @@ export class TemplateService {
     });
   }
 
-  async getTemplateById(templateId: string, userId: string) {
+  async getTemplateById(userId: string, templateId: string) {
     return prisma.template.findFirst({
       where: { id: templateId, userId },
       include: { items: true },
     });
   }
 
-  async deleteTemplate(templateId: string, userId: string) {
+  async deleteTemplate(userId: string, templateId: string) {
     return prisma.template.deleteMany({
       where: { id: templateId, userId },
     });

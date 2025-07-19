@@ -15,12 +15,6 @@ export default async function Navigation() {
         Trips
       </Link>
       <Link
-        href="/templates"
-        className="block py-2 text-lg font-bold hover:underline"
-      >
-        Templates
-      </Link>
-      <Link
         href="/reports"
         className="block py-2 text-lg font-bold hover:underline"
       >

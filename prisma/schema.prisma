@@ -129,7 +129,7 @@ model TemplateItem {
   name       String
   quantity   Int
   templateId String
-  template   Template  @relation(fields: [templateId], references: [id])
+  template   Template  @relation(fields: [templateId], references: [id], onDelete: Cascade)
   categoryId String?
   category   Category? @relation(fields: [categoryId], references: [id])
 }

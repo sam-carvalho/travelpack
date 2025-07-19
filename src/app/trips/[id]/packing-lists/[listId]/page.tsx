@@ -45,8 +45,8 @@ export default async function ViewPackingListPage({
         <div className="flex items-center space-x-4">
           <CreateTemplateButton
             userId={user.id}
-            packingListName={list.name}
             packingListId={listId}
+            packingListName={list.name}
           />
         </div>
       </div>
