@@ -23,6 +23,7 @@ export function EditPackingItemModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const [_, startTransition] = useTransition();
   const [name, setName] = useState(item.name);
   const [quantity, setQuantity] = useState(item.quantity);
@@ -39,6 +40,7 @@ export function EditPackingItemModal({
         categoryOptions.find((opt) => opt.value === item.categoryId) ?? null,
       );
     }
+    /* eslint-disable react-hooks/exhaustive-deps */
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {

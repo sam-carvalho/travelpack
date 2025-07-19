@@ -28,6 +28,7 @@ export function PackingListTable({
   const [editingItem, setEditingItem] = useState<PackingListItem | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const [_, startTransition] = useTransition();
   const progressBarColor = progress > 0 ? "bg-blue-600" : "bg-gray-200";
 

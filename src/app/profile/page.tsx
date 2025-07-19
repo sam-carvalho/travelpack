@@ -4,7 +4,6 @@ import { UpdateUserInfoForm } from "@/app/components/profile/user-info-form";
 import { ManageUserCategoriesForm } from "@/app/components/profile/manage-categories-form";
 import { CategoryService } from "@/services/category-service";
 import { TemplateService } from "@/services/template-service";
-import { DeleteTemplateButton } from "../components/profile/delete-template-button";
 import { ManageTemplates } from "../components/profile/manage-template";
 
 export default async function ProfilePage() {

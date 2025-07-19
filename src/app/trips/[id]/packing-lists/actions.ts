@@ -11,7 +11,6 @@ import { PackingList } from "@/app/lib/types";
 import { TripService } from "@/services/trip-service";
 import { z } from "zod";
 import { getCurrentUser } from "@/app/lib/auth";
-import { Item } from "@/generated/prisma";
 
 const PackingListSchema = z.object({
   title: z.string().min(1),

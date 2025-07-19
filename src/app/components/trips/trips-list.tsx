@@ -19,8 +19,10 @@ export default async function TripsList() {
   if (trips.length === 0) {
     return (
       <div className="py-8 text-center text-gray-500">
-        <p className="text-lg">You don’t have any trips yet.</p>
-        <p className="mt-2 text-sm">Click "Create Trip" to get started.</p>
+        <p className="text-lg">You don&quot;t have any trips yet.</p>
+        <p className="mt-2 text-sm">
+          Click &quot;Create Trip&quot; to get started.
+        </p>
       </div>
     );
   }

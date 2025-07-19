@@ -17,6 +17,7 @@ export function ManageUserCategoriesForm({
   categories?: Category[];
 }) {
   const [name, setName] = useState("");
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const [_, startTransition] = useTransition();
   const [localCategories, setLocalCategories] = useState(categories);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
