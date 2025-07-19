@@ -1,7 +1,7 @@
 "use client";
 
-import { Templates } from "@/app/lib/types";
 import { deleteTemplateAction } from "@/app/profile/actions";
+import { Template } from "@/generated/prisma";
 import { startTransition } from "react";
 import toast from "react-hot-toast";
 
@@ -10,7 +10,7 @@ export function ManageTemplates({
   templates = [],
 }: {
   userId: string;
-  templates?: Templates[];
+  templates?: Template[];
 }) {
   const handleDelete = (templateId: string) => {
     if (!confirm("Are you sure you want to delete this template?")) return;

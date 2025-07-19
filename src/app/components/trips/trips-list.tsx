@@ -1,21 +1,15 @@
 import Link from "next/link";
-import { TripService } from "@/services/trip-service";
-import { getCurrentUser } from "@/app/lib/auth";
-import { redirect } from "next/navigation";
 import { deleteTripAction } from "@/app/trips/actions";
 import React from "react";
+import { Trip } from "@/generated/prisma";
 
-export default async function TripsList() {
-  let user;
-  try {
-    user = await getCurrentUser();
-  } catch (err) {
-    console.error(err);
-    redirect("/signin");
-  }
-  const service = new TripService();
-  const trips = await service.getTripsByUser(user.id);
-
+export default async function TripsList({
+  userId,
+  trips,
+}: {
+  userId: string;
+  trips: Trip[];
+}) {
   if (trips.length === 0) {
     return (
       <div className="py-8 text-center text-gray-500">
@@ -61,7 +55,7 @@ export default async function TripsList() {
               >
                 Edit
               </Link>
-              <form action={deleteTripAction.bind(null, user.id, trip.id)}>
+              <form action={deleteTripAction.bind(null, userId, trip.id)}>
                 <button
                   type="submit"
                   className="rounded-md border border-red-300 px-3 py-1 text-sm text-red-600 hover:bg-red-50"
@@ -124,9 +118,7 @@ export default async function TripsList() {
                     >
                       Edit
                     </Link>
-                    <form
-                      action={deleteTripAction.bind(null, user.id, trip.id)}
-                    >
+                    <form action={deleteTripAction.bind(null, userId, trip.id)}>
                       <button
                         type="submit"
                         className="rounded-md border border-red-300 px-3 py-1 text-sm text-red-600 hover:bg-red-50"

@@ -1,7 +1,20 @@
 import TripsList from "@/app/components/trips/trips-list";
 import Link from "next/link";
+import { getCurrentUser } from "../lib/auth";
+import { redirect } from "next/navigation";
+import { TripService } from "@/services/trip-service";
 
-export default function TripsPage() {
+export default async function TripsPage() {
+  let user;
+  try {
+    user = await getCurrentUser();
+  } catch (err) {
+    console.error(err);
+    redirect("/signin");
+  }
+  const service = new TripService();
+  const trips = await service.getTripsByUser(user.id);
+
   return (
     <div className="mt-10 w-7xl overflow-hidden rounded-xl bg-zinc-50 shadow-lg">
       <div className="flex items-center justify-between p-12">
@@ -13,7 +26,7 @@ export default function TripsPage() {
           New Trip
         </Link>
       </div>
-      <TripsList />
+      <TripsList userId={user.id} trips={trips} />
     </div>
   );
 }

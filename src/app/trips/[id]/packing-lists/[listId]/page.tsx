@@ -2,12 +2,14 @@ import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { PackingListService } from "@/services/packing-list-service";
 import { deletePackingListAction } from "../actions";
-import ViewPackingList from "@/app/components/lists/view-list";
 import { getCurrentUser } from "@/app/lib/auth";
 import { CreateTemplateButton } from "@/app/components/lists/create-template-button";
 import { ExportPDFButton } from "@/app/components/lists/export-pdf-button";
 import { ExportShareLinkButton } from "@/app/components/lists/share-button";
 import { redirect } from "next/navigation";
+import { getProgressCounts } from "@/app/utils/getProgressCount";
+import { CategoryService } from "@/services/category-service";
+import { PackingListTable } from "@/app/components/lists/view-list-table";
 
 export default async function ViewPackingListPage({
   params,
@@ -23,8 +25,14 @@ export default async function ViewPackingListPage({
   }
 
   const { id, listId } = await params;
-  const service = new PackingListService();
-  const list = await service.getPackingListById(listId);
+  const listService = new PackingListService();
+  const categoryService = new CategoryService();
+  const [list, categories] = await Promise.all([
+    listService.getPackingListById(listId),
+    categoryService.getAllCategories(user.id),
+  ]);
+
+  const { totalCount, progress } = getProgressCounts(list);
 
   if (!list) {
     return <p className="p-12">No lists available. Start by creating one.</p>;
@@ -50,7 +58,13 @@ export default async function ViewPackingListPage({
           />
         </div>
       </div>
-      <ViewPackingList list={list} />
+      <PackingListTable
+        list={list}
+        userId={user.id}
+        progress={progress}
+        totalCount={totalCount}
+        categories={categories}
+      />
       <div className="flex items-center justify-between gap-4 px-12 pb-12">
         <div className="flex gap-4 bg-gray-50">
           <ExportShareLinkButton userId={user.id} list={list} />

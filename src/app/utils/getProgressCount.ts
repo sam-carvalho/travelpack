@@ -1,6 +1,6 @@
 import { PackingList } from "../lib/types";
 
-export const getProgressCounts = (list: PackingList) => {
+export const getProgressCounts = (list: PackingList | null) => {
   if (!list || !list.items) {
     return { totalCount: 0, progress: 0 };
   }

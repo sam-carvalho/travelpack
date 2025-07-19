@@ -59,8 +59,6 @@ export async function createPackingList(_: unknown, formData: FormData) {
         packingListId: newList.id,
       }));
 
-      console.log("items", items);
-
       await itemService.addManyItems(items);
     }
   }
