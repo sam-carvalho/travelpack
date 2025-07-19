@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="mx-8 mt-8 min-h-screen bg-blue-100 text-gray-900 lg:mx-40">
+      <body className="mx-8 mt-8 min-h-screen overflow-visible bg-blue-100 text-gray-900 lg:mx-70">
         <Navigation />
         <Toaster position="top-right" />
         <main id="main">{children}</main>

@@ -10,7 +10,7 @@ export function ToggleAddRowButton({
   return (
     <button
       onClick={onToggle}
-      className="text-md rounded-lg px-4 py-2 font-semibold text-gray-700 hover:text-blue-600"
+      className="text-md cursor-pointer rounded-lg px-4 py-2 font-semibold text-gray-700 hover:text-blue-600"
     >
       {showForm ? "Cancel" : "+ Add Item"}
     </button>

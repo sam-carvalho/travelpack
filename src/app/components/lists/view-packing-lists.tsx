@@ -24,8 +24,8 @@ export default async function PackingLists({
         <table className="w-full table-auto divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-800 text-sm sm:text-base">
           <thead className="bg-stone-100">
             <tr>
-              <th className="px-4 py-2 text-left font-semibold text-gray-600">
-                Name
+              <th className="px-4 py-2 text-left text-lg font-semibold text-gray-600">
+                List Name
               </th>
             </tr>
           </thead>

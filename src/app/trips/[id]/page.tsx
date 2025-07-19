@@ -26,7 +26,7 @@ export default async function ViewTripPage({
   }
 
   return (
-    <div className="min-h-md mt-10 w-7xl overflow-hidden rounded-xl bg-zinc-50 shadow-lg">
+    <div className="min-h-md mt-10 w-5xl overflow-hidden rounded-xl bg-zinc-50 shadow-lg">
       <div className="flex items-center justify-between p-12">
         <div className="flex items-center space-x-4">
           <Link
@@ -44,7 +44,7 @@ export default async function ViewTripPage({
           Packing Lists
         </Link>
       </div>
-      <div className="px-12 pb-6">
+      <div className="text-md px-20 pb-6">
         <p className="mb-2 text-gray-600">
           <strong>Destination:</strong> {trip.destination}
         </p>
@@ -70,8 +70,7 @@ export default async function ViewTripPage({
           </p>
         )}
       </div>
-
-      <div className="flex gap-4 bg-gray-50 px-12 pb-12">
+      <div className="flex gap-2 bg-gray-50 px-20 pb-12">
         <Link
           href={`/trips/${trip.id}/edit`}
           className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-800 hover:bg-gray-100"

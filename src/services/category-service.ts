@@ -42,6 +42,13 @@ export class CategoryService {
     }
   }
 
+  async updateCategory(userId: string, categoryId: string, newName: string) {
+    return prisma.category.updateMany({
+      where: { id: categoryId, userId },
+      data: { name: newName },
+    });
+  }
+
   async deleteCategory(userId: string, categoryId: string) {
     return prisma.category.deleteMany({
       where: {

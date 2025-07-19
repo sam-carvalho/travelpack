@@ -2,6 +2,8 @@ import { getCurrentUser } from "@/app/lib/auth";
 import { TripService } from "@/services/trip-service";
 import { redirect } from "next/navigation";
 import { EditTripForm } from "@/app/components/trips/edit-trip-form";
+import Link from "next/link";
+import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 
 export default async function EditTripPage({
   params,
@@ -26,8 +28,17 @@ export default async function EditTripPage({
   return (
     <div className="mt-10 w-7xl overflow-hidden rounded-xl bg-zinc-50 shadow-lg">
       <div className="flex items-center justify-between p-12">
-        <h1 className="text-2xl font-medium">Edit your trip details</h1>
+        <div className="flex items-center space-x-4">
+          <Link
+            href={`/trips/`}
+            className="text-sm text-gray-600 transition hover:text-gray-800"
+          >
+            <ArrowLeftIcon className="size-4" />
+          </Link>
+          <h1 className="text-2xl font-medium">Edit your trip details</h1>
+        </div>
       </div>
+
       <EditTripForm
         userId={user.id}
         trip={{

@@ -63,7 +63,7 @@ export default async function ViewPackingListPage({
           <form action={deletePackingListAction.bind(null, id, listId)}>
             <button
               type="submit"
-              className="cursor-pointer rounded-md border border-red-300 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+              className="h-14 cursor-pointer rounded-md border border-red-300 px-3 py-2 text-sm text-red-600 hover:bg-red-50 md:h-10"
             >
               Delete Packing List
             </button>
