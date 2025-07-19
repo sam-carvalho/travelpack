@@ -9,7 +9,7 @@ export default async function ImportPage({
   searchParams: { listId: string };
 }) {
   const user = await getCurrentUser();
-  const listId = await searchParams.listId;
+  const listId = searchParams.listId;
 
   if (!listId) redirect("/404");
 
