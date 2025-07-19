@@ -11,6 +11,7 @@ type AddPackingItemRowProps = {
   packingListId: string;
   categories?: Category[];
   onAfterSubmit?: () => void;
+  onCategoryCreated?: (newCategory: Category) => void;
 };
 
 export function AddPackingItemRow({

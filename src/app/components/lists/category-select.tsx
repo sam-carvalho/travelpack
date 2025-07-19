@@ -42,6 +42,11 @@ export function CategorySelect({
       onCreateOption={handleCreate}
       options={options}
       value={value}
+      menuPortalTarget={typeof window !== "undefined" ? document.body : null}
+      menuPosition="fixed"
+      styles={{
+        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+      }}
     />
   );
 }

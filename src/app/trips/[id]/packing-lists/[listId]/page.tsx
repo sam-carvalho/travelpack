@@ -43,11 +43,6 @@ export default async function ViewPackingListPage({
           <h1 className="text-2xl font-medium">{list.name}</h1>
         </div>
         <div className="flex items-center space-x-4">
-          <ExportShareLinkButton userId={user.id} list={list} />
-          <ExportPDFButton
-            packingListId={list.id}
-            packingListName={list.name}
-          />
           <CreateTemplateButton
             userId={user.id}
             packingListName={list.name}
@@ -56,15 +51,24 @@ export default async function ViewPackingListPage({
         </div>
       </div>
       <ViewPackingList list={list} />
-      <div className="flex justify-end gap-4 bg-gray-50 px-12 pb-12">
-        <form action={deletePackingListAction.bind(null, id, listId)}>
-          <button
-            type="submit"
-            className="cursor-pointer rounded-md border border-red-300 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
-          >
-            Delete Packing List
-          </button>
-        </form>
+      <div className="flex items-center justify-between gap-4 px-12 pb-12">
+        <div className="flex gap-4 bg-gray-50">
+          <ExportShareLinkButton userId={user.id} list={list} />
+          <ExportPDFButton
+            packingListId={list.id}
+            packingListName={list.name}
+          />
+        </div>
+        <div className="flex justify-end bg-gray-50">
+          <form action={deletePackingListAction.bind(null, id, listId)}>
+            <button
+              type="submit"
+              className="cursor-pointer rounded-md border border-red-300 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+            >
+              Delete Packing List
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

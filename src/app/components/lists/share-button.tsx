@@ -35,7 +35,7 @@ export function ExportShareLinkButton({
       disabled={isPending}
       className="cursor-pointer rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium hover:bg-gray-100"
     >
-      {isPending ? "Generating..." : "Copy Shareable Link"}
+      {isPending ? "Generating..." : "Copy Export Link"}
     </button>
   );
 }

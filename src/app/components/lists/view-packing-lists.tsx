@@ -21,7 +21,7 @@ export default async function PackingLists({
   return (
     <div className="w-full overflow-x-auto px-4 py-4 pb-12 sm:px-12">
       <div className="flex items-center justify-center">
-        <table className="w-3xl table-auto divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-800 text-sm sm:text-base">
+        <table className="w-full table-auto divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-800 text-sm sm:text-base">
           <thead className="bg-stone-100">
             <tr>
               <th className="px-4 py-2 text-left font-semibold text-gray-600">

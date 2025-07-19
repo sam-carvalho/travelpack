@@ -4,11 +4,12 @@ import { useState, useTransition } from "react";
 import { ToggleAddRowButton } from "./add-item-row-button";
 import { PackingCheckbox } from "./packing-checkbox";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
-import { Category, PackingList } from "@/app/lib/types";
+import { Category, PackingList, PackingListItem } from "@/app/lib/types";
 import { deletePackingListItemAction } from "@/app/trips/[id]/packing-lists/actions";
 import React from "react";
 import { AddPackingItemRow } from "./add-packing-item-row";
 import toast from "react-hot-toast";
+import { EditPackingItemModal } from "./edit-list-modal";
 
 export function PackingListTable({
   list,
@@ -23,6 +24,7 @@ export function PackingListTable({
   totalCount: number;
   categories?: Category[];
 }) {
+  const [editingItem, setEditingItem] = useState<PackingListItem | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [_, startTransition] = useTransition();
@@ -47,7 +49,7 @@ export function PackingListTable({
   };
 
   return (
-    <div className="w-max-500 overflow-x-auto px-4 pb-12 sm:px-12">
+    <div className="w-max-500 h-auto overflow-x-auto px-4 pb-12 sm:px-12">
       <table className="w-full divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white">
         <thead className="bg-stone-100 text-left">
           <tr>
@@ -90,11 +92,21 @@ export function PackingListTable({
                   {item.category?.name || "No Category"}
                 </td>
                 <td className="px-5 py-4">
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
                     <PencilSquareIcon
                       className="h-5 w-5 cursor-pointer text-gray-500 hover:text-gray-700"
-                      href={`/trips/${list.tripId}/packing-lists/${list.id}/items/${item.id}/edit`}
+                      onClick={() => setEditingItem(item)}
                     />
+                    {editingItem && (
+                      <EditPackingItemModal
+                        userId={userId}
+                        tripId={list.tripId}
+                        item={editingItem}
+                        isOpen={!!editingItem}
+                        onClose={() => setEditingItem(null)}
+                        categories={categories}
+                      />
+                    )}
                     <button
                       onClick={() =>
                         handleDelete(list.tripId, item.id, list.id)
