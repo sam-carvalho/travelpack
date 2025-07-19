@@ -23,7 +23,7 @@ export function TripFormFields({
     <form
       onSubmit={handleSubmit}
       aria-describedby="form-error"
-      className="mx-12 md:mx-auto mb-20 max-w-xl rounded-xl bg-white p-8 shadow-lg border border-gray-200"
+      className="mx-12 mb-20 max-w-xl rounded-xl border border-gray-200 bg-white p-8 shadow-lg md:mx-auto"
     >
       <div className="mb-4">
         <label
@@ -59,7 +59,7 @@ export function TripFormFields({
         />
       </div>
 
-      <div className="mb-4 flex flex-col sm:flex-row gap-4">
+      <div className="mb-4 flex flex-col gap-4 sm:flex-row">
         <div className="w-full">
           <label
             htmlFor="startDate"
@@ -118,7 +118,7 @@ export function TripFormFields({
 
       <button
         type="submit"
-        className="w-full rounded-md px-6 py-3 text-white font-medium shadow bg-gradient-to-r from-amber-500 to-pink-500 hover:to-pink-800 transition-all duration-300 cursor-pointer"
+        className="w-full cursor-pointer rounded-md bg-gradient-to-r from-amber-500 to-pink-500 px-6 py-3 font-medium text-white shadow transition-all duration-300 hover:to-pink-800"
       >
         {buttonLabel}
       </button>

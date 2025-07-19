@@ -50,7 +50,7 @@ export class TripService {
   async updateTrip(
     userId: string,
     tripId: string,
-    updates: Partial<CreateTripInput>
+    updates: Partial<CreateTripInput>,
   ) {
     return prisma.trip.updateMany({
       where: {

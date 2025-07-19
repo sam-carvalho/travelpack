@@ -24,7 +24,7 @@ export default async function EditTripPage({
   }
 
   return (
-    <div className="mt-10 rounded-xl overflow-hidden shadow-lg bg-zinc-50">
+    <div className="mt-10 overflow-hidden rounded-xl bg-zinc-50 shadow-lg">
       <div className="flex items-center justify-between p-12">
         <h1 className="text-2xl font-medium">Edit your trip details</h1>
       </div>

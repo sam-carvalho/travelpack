@@ -1,3 +1,5 @@
+import { Item } from "@/generated/prisma";
+
 export interface ReportRecord {
   label: string;
   count: number;
@@ -25,9 +27,10 @@ export interface PackingList {
   id: string;
   name: string;
   tripId: string;
-  items?: PackingListBaseItem[];
+  items?: PackingListItem[];
 }
 export interface PackingListItem extends PackingListBaseItem {
+  id: string;
   category?: Category | null;
 }
 

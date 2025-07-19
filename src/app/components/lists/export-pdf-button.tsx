@@ -4,11 +4,9 @@ import { useTransition } from "react";
 import toast from "react-hot-toast";
 
 export function ExportPDFButton({
-  tripId,
   packingListId,
   packingListName,
 }: {
-  tripId: string;
   packingListId: string;
   packingListName: string;
 }) {
@@ -19,7 +17,7 @@ export function ExportPDFButton({
       const toastId = toast.loading("Generating PDF...");
       try {
         const res = await fetch(
-          `/api/export-pdf?tripId=${tripId}&packingListId=${packingListId}`
+          `/api/export-pdf?packingListId=${packingListId}`,
         );
         if (!res.ok) throw new Error("Failed to generate PDF");
         const blob = await res.blob();
@@ -40,7 +38,7 @@ export function ExportPDFButton({
   return (
     <button
       onClick={handleExport}
-      className="px-4 py-2 text-sm font-medium border border-gray-300 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer"
+      className="cursor-pointer rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium hover:bg-gray-100"
       disabled={pending}
     >
       {pending ? "Generating..." : "Generate PDF"}

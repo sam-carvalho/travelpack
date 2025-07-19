@@ -33,7 +33,7 @@ export function ExportShareLinkButton({
     <button
       onClick={handleExport}
       disabled={isPending}
-      className="px-4 py-2 text-sm font-medium border border-gray-300 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer"
+      className="cursor-pointer rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium hover:bg-gray-100"
     >
       {isPending ? "Generating..." : "Copy Shareable Link"}
     </button>

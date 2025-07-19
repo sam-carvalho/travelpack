@@ -20,7 +20,7 @@ export function CreateTemplateButton({
       const template = await createTemplateAction(
         userId,
         packingListId,
-        packingListName
+        packingListName,
       );
       if (template) toast.success("Template created!");
     });
@@ -30,7 +30,7 @@ export function CreateTemplateButton({
     <button
       onClick={handleClick}
       disabled={isPending}
-      className="cursor-pointer px-4 py-2 text-sm font-medium bg-gradient-to-r from-amber-500 to-pink-500 text-white rounded-lg hover:to-pink-800 transition-all duration-300"
+      className="cursor-pointer rounded-lg bg-gradient-to-r from-amber-500 to-pink-500 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:to-pink-800"
     >
       {isPending ? "Creating..." : "Save as Template"}
     </button>

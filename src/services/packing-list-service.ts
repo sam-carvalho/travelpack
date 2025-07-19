@@ -19,9 +19,10 @@ export class PackingListService {
     });
   }
 
-  async getPackingListById(tripId: string, packingListId: string) {
-    const packingList = await prisma.packingList.findFirst({
-      where: { tripId, id: packingListId },
+  async getPackingListById(packingListId: string) {
+    const packingList = await prisma.packingList.findUnique({
+      where: { id: packingListId },
+      include: { trip: true },
     });
 
     if (!packingList) return null;

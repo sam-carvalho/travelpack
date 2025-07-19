@@ -32,7 +32,6 @@ export function AddPackingItemRow({
     e.preventDefault();
     setSubmitting(true);
     try {
-      console.log(form);
       await addPackingItemAction(tripId, packingListId, {
         name: form.name,
         quantity: Number(form.quantity),
@@ -60,7 +59,7 @@ export function AddPackingItemRow({
           autoFocus
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
-          className="w-full border border-gray-300 rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-md border border-gray-300 px-2 py-1 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           placeholder="Item name"
           required
         />
@@ -73,7 +72,7 @@ export function AddPackingItemRow({
           onChange={(e) =>
             setForm({ ...form, quantity: Number(e.target.value) })
           }
-          className="w-full border border-gray-300 rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-md border border-gray-300 px-2 py-1 focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
       </td>
       <td className="w-2xs px-2 py-1">
@@ -92,7 +91,7 @@ export function AddPackingItemRow({
       <td className="p-4">
         <button
           onClick={handleSubmit}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded disabled:opacity-50"
+          className="rounded bg-blue-600 px-3 py-1 text-white hover:bg-blue-700 disabled:opacity-50"
           disabled={!form.name || !form.quantity || submitting}
         >
           {submitting ? "..." : "Add"}

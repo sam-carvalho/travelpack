@@ -6,7 +6,7 @@ export class TemplateService {
   async createTemplate(
     userId: string,
     packingListId: string,
-    packingListName: string
+    packingListName: string,
   ) {
     const service = new ItemService();
     const items = await service.getItemsByPackingList(packingListId);

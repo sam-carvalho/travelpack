@@ -53,9 +53,76 @@ import { TripService } from "@/services/trip-service";
 //   redirect(`/trips/${tripId}`);
 // }
 
+import { z } from "zod";
+import { getCurrentUser } from "@/app/lib/auth";
+
+const PackingListSchema = z.object({
+  title: z.string().min(1),
+  tripId: z.uuid(),
+});
+
+export async function createPackingList(_: unknown, formData: FormData) {
+  const user = await getCurrentUser();
+
+  const result = PackingListSchema.safeParse({
+    title: formData.get("title"),
+    tripId: formData.get("tripId"),
+  });
+
+  if (!result.success) {
+    return { errors: result.error.flatten().fieldErrors };
+  }
+
+  const { title, tripId } = result.data;
+
+  const tripService = new TripService();
+  const trip = await tripService.getTripById(user.id, tripId);
+
+  if (!trip || trip.userId !== user.id) {
+    return { message: "Trip not found or unauthorized." };
+  }
+
+  const data = { name: title, tripId };
+
+  const listService = new PackingListService();
+  const list = await listService.createPackingList(tripId, data);
+
+  revalidatePath(`/trips/${tripId}/packing-lists/${list.id}`);
+  redirect(`/trips/${tripId}/packing-lists/${list.id}`);
+}
+
+export async function updatePackingList(id: string, formData: FormData) {
+  const user = await getCurrentUser();
+
+  const result = PackingListSchema.safeParse({
+    title: formData.get("title"),
+    tripId: formData.get("tripId"),
+  });
+
+  if (!result.success) {
+    return {
+      errors: result.error.flatten().fieldErrors,
+    };
+  }
+
+  const { title, tripId } = result.data;
+
+  const listService = new PackingListService();
+  const packingList = await listService.getPackingListById(id);
+
+  if (!packingList || packingList.trip.userId !== user.id) {
+    return { message: "Packing list not found or unauthorized." };
+  }
+
+  await listService.updatePackingList(id, { name: String(title) });
+
+  revalidatePath(`/trips/${tripId}/packing-lists/${id}/edit`);
+  redirect(`/trips/${tripId}/packing-lists/${id}/edit`);
+}
+
 export async function deletePackingListAction(
   tripId: string,
-  packingListId: string
+  packingListId: string,
 ) {
   const service = new PackingListService();
   await service.deletePackingList(packingListId);
@@ -67,7 +134,7 @@ export async function deletePackingListAction(
 export async function deletePackingListItemAction(
   tripId: string,
   itemId: string,
-  packingListId: string
+  packingListId: string,
 ) {
   const service = new ItemService();
   await service.deleteItem(itemId);
@@ -90,7 +157,7 @@ export async function togglePackedAction(formData: FormData) {
 export async function addPackingItemAction(
   tripId: string,
   packingListId: string,
-  input: { name: string; quantity: number; categoryId?: string }
+  input: { name: string; quantity: number; categoryId?: string },
 ) {
   const service = new ItemService();
   await service.addItem(packingListId, {
@@ -107,7 +174,7 @@ export async function createCategoryAction(
   userId: string,
   name: string,
   tripId: string,
-  packingListId: string
+  packingListId: string,
 ) {
   const service = new CategoryService();
   const existing = await service.getCategoryByName(userId, name);
@@ -120,24 +187,21 @@ export async function createCategoryAction(
 export async function createTemplateAction(
   userId: string,
   packingListName: string,
-  packingListId: string
+  packingListId: string,
 ) {
   const service = new TemplateService();
   const template = await service.createTemplate(
     userId,
     packingListId,
-    packingListName
+    packingListName,
   );
   revalidatePath(`/templates`);
   return template;
 }
 
-export async function exportPackingListPdf(
-  tripId: string,
-  packingListId: string
-) {
+export async function exportPackingListPdf(packingListId: string) {
   const service = new PackingListService();
-  const packingList = await service.getPackingListById(tripId, packingListId);
+  const packingList = await service.getPackingListById(packingListId);
   if (!packingList) throw new Error("Packing list not found.");
 
   const pdfDoc = await PDFDocument.create();
@@ -276,7 +340,7 @@ export async function exportPackingListPdf(
 
 export async function exportPackingListToLink(
   userId: string,
-  list: PackingList
+  list: PackingList,
 ) {
   const tripService = new TripService();
   const trip = await tripService.getTripById(userId, list.tripId);

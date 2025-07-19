@@ -29,12 +29,12 @@ export default async function ViewPackingListsPage({
   }
 
   return (
-    <div className="mt-10 pb-12 rounded-xl overflow-hidden shadow-lg bg-zinc-50">
+    <div className="min-h-lg mt-10 w-7xl overflow-hidden rounded-xl bg-zinc-50 pb-12 shadow-lg">
       <div className="flex items-center justify-between p-12">
         <div className="flex items-center space-x-4">
           <Link
             href={`/trips/${id}`}
-            className="text-sm text-gray-600 hover:text-gray-800 transition"
+            className="text-sm text-gray-600 transition hover:text-gray-800"
           >
             <ArrowLeftIcon className="size-4" />
           </Link>
@@ -42,7 +42,7 @@ export default async function ViewPackingListsPage({
         </div>
         <Link
           href={`/trips/${id}/packing-lists/new`}
-          className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-amber-500 to-pink-500 text-white rounded-lg hover:to-pink-800 transition-all duration-300"
+          className="rounded-lg bg-gradient-to-r from-amber-500 to-pink-500 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:to-pink-800"
         >
           New Packing List
         </Link>

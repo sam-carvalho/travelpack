@@ -23,18 +23,24 @@ export class PackingSummaryReport extends BaseReport {
       },
     });
 
-    const summary = items.reduce((acc, item) => {
-      const key = `${item.name}-${item.category}`;
-      acc[key] = acc[key] || {
-        name: item.name,
-        category: item.category || "No Category",
-        total: 0,
-        usedIn: new Set<string>(),
-      };
-      acc[key].total += item.quantity;
-      acc[key].usedIn.add(item.packingList.trip.name);
-      return acc;
-    }, {} as Record<string, { name: string; category: string; total: number; usedIn: Set<string> }>);
+    const summary = items.reduce(
+      (acc, item) => {
+        const key = `${item.name}-${item.category}`;
+        acc[key] = acc[key] || {
+          name: item.name,
+          category: item.category || "No Category",
+          total: 0,
+          usedIn: new Set<string>(),
+        };
+        acc[key].total += item.quantity;
+        acc[key].usedIn.add(item.packingList.trip.name);
+        return acc;
+      },
+      {} as Record<
+        string,
+        { name: string; category: string; total: number; usedIn: Set<string> }
+      >,
+    );
 
     this.data = Object.values(summary).map((s) => ({
       label: `${s.name} (${s.category})`,

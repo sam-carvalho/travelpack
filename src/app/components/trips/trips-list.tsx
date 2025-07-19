@@ -18,29 +18,32 @@ export default async function TripsList() {
 
   if (trips.length === 0) {
     return (
-      <p className="px-12 pb-12">No trips found. Start by creating one!</p>
+      <div className="py-8 text-center text-gray-500">
+        <p className="text-lg">You don’t have any trips yet.</p>
+        <p className="mt-2 text-sm">Click "Create Trip" to get started.</p>
+      </div>
     );
   }
 
   return (
     <div className="overflow-x-auto px-12 pb-12">
-      <table className="w-full rounded-lg border border-gray-200 divide-y divide-gray-200">
+      <table className="w-full divide-y divide-gray-200 rounded-lg border border-gray-200">
         <thead className="bg-stone-100 text-left">
           <tr>
-            <th className="px-6 py-3 text-gray-600 font-semibold">Trip</th>
-            <th className="px-6 py-3 text-gray-600 font-semibold">
+            <th className="px-6 py-3 font-semibold text-gray-600">Trip</th>
+            <th className="px-6 py-3 font-semibold text-gray-600">
               Destination
             </th>
-            <th className="px-6 py-3 text-gray-600 font-semibold">
+            <th className="px-6 py-3 font-semibold text-gray-600">
               Travel Dates
             </th>
-            <th className="px-6 py-3 text-gray-600 font-semibold">Notes</th>
+            <th className="px-6 py-3 font-semibold text-gray-600">Notes</th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-100">
+        <tbody className="divide-y divide-gray-100 bg-white">
           {trips.map((trip) => (
             <React.Fragment key={trip.id}>
-              <tr className="hover:bg-gray-50 transition">
+              <tr className="transition hover:bg-gray-50">
                 <td className="px-6 py-4 font-bold text-gray-800">
                   {trip.name}
                 </td>
@@ -62,7 +65,7 @@ export default async function TripsList() {
               </tr>
               <tr className="bg-white">
                 <td colSpan={4} className="px-6 py-4">
-                  <div className="flex gap-2 justify-end">
+                  <div className="flex justify-end gap-2">
                     <Link
                       href={`/trips/${trip.id}`}
                       className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-800 hover:bg-gray-100"

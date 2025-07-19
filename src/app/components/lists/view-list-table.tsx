@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { ToggleAddRowButton } from "./add-item-row-button";
 import { PackingCheckbox } from "./packing-checkbox";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
@@ -8,7 +8,7 @@ import { Category, PackingList } from "@/app/lib/types";
 import { deletePackingListItemAction } from "@/app/trips/[id]/packing-lists/actions";
 import React from "react";
 import { AddPackingItemRow } from "./add-packing-item-row";
-import Link from "next/link";
+import toast from "react-hot-toast";
 
 export function PackingListTable({
   list,
@@ -24,36 +24,56 @@ export function PackingListTable({
   categories?: Category[];
 }) {
   const [showForm, setShowForm] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [_, startTransition] = useTransition();
   const progressBarColor = progress > 0 ? "bg-blue-600" : "bg-gray-200";
 
+  const handleDelete = (tripId: string, itemId: string, listId: string) => {
+    const confirmed = confirm("Are you sure you want to delete this item?");
+    if (!confirmed) return;
+
+    setDeletingId(itemId);
+
+    startTransition(async () => {
+      try {
+        await deletePackingListItemAction(tripId, itemId, listId);
+        toast.success("Item deleted");
+      } catch (err) {
+        toast.error("Failed to delete item");
+      } finally {
+        setDeletingId(null);
+      }
+    });
+  };
+
   return (
-    <div className="px-12 pb-12">
-      <table className="w-full rounded-lg border border-gray-200 divide-y divide-gray-200">
+    <div className="w-max-500 overflow-x-auto px-4 pb-12 sm:px-12">
+      <table className="w-full divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white">
         <thead className="bg-stone-100 text-left">
           <tr>
-            <th className="px-4 py-3 text-gray-600 font-semibold text-center">
+            <th className="px-4 py-3 text-center font-semibold text-gray-600">
               Packed
             </th>
-            <th className="px-4 py-3 text-gray-600 font-semibold">Item Name</th>
-            <th className="px-4 py-3 text-gray-600 font-semibold">Quantity</th>
-            <th className="px-4 py-3 text-gray-600 font-semibold">Category</th>
-            <th className="px-4 py-3 text-gray-600 font-semibold">Actions</th>
+            <th className="px-4 py-3 font-semibold text-gray-600">Item Name</th>
+            <th className="px-4 py-3 font-semibold text-gray-600">Quantity</th>
+            <th className="px-4 py-3 font-semibold text-gray-600">Category</th>
+            <th className="px-4 py-3 font-semibold text-gray-600">Actions</th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-100">
+        <tbody className="divide-y divide-gray-100 bg-white">
           {!list.items || list.items.length === 0 ? (
             <tr>
-              <td colSpan={5} className="px-6 py-4 text-gray-500">
-                No items found in this packing list. Use a{" "}
-                <Link href="/templates">template</Link> to create one or start
-                by adding items!
-              </td>
+              {!showForm && (
+                <td colSpan={5} className="p-4 text-gray-600">
+                  Click the add item button below to start adding packing items!
+                </td>
+              )}
             </tr>
           ) : null}
           {list.items?.map((item) => (
             <React.Fragment key={item.id}>
-              <tr className="hover:bg-gray-50 transition">
-                <td className="px-3 py-4 font-semibold text-gray-800 items-center text-center">
+              <tr className="transition hover:bg-gray-50">
+                <td className="items-center px-3 py-4 text-center font-semibold text-gray-800">
                   <PackingCheckbox
                     defaultChecked={item.packed}
                     tripId={list.tripId}
@@ -72,21 +92,18 @@ export function PackingListTable({
                 <td className="px-5 py-4">
                   <div className="flex gap-2">
                     <PencilSquareIcon
-                      className="h-5 w-5 text-gray-500 cursor-pointer hover:text-gray-700"
+                      className="h-5 w-5 cursor-pointer text-gray-500 hover:text-gray-700"
                       href={`/trips/${list.tripId}/packing-lists/${list.id}/items/${item.id}/edit`}
                     />
-                    <form
-                      action={deletePackingListItemAction.bind(
-                        null,
-                        list.tripId,
-                        item.id,
-                        list.id
-                      )}
+                    <button
+                      onClick={() =>
+                        handleDelete(list.tripId, item.id, list.id)
+                      }
+                      disabled={deletingId === item.id}
+                      className="cursor-pointer text-red-500 hover:text-red-700"
                     >
-                      <button type="submit">
-                        <TrashIcon className="h-5 w-5 text-red-500 cursor-pointer hover:text-red-700" />
-                      </button>
-                    </form>
+                      <TrashIcon className="h-5 w-5" />
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -94,9 +111,8 @@ export function PackingListTable({
           ))}
           <tr
             className={`${
-              showForm ? "" : "invisible pointer-events-none"
-            } bg-white hover:bg-gray-50 transition
-            `}
+              showForm ? "" : "pointer-events-none invisible"
+            } bg-white transition hover:bg-gray-50`}
           >
             <AddPackingItemRow
               userId={userId}
@@ -108,16 +124,16 @@ export function PackingListTable({
           </tr>
         </tbody>
       </table>
-      <div className="flex items-center justify-between mt-4">
+      <div className="mt-4 flex items-center justify-between">
         <ToggleAddRowButton
           showForm={showForm}
           onToggle={() => setShowForm((v) => !v)}
         />
         {totalCount > 0 && (
-          <div className="w-1/3 flex flex-col items-center gap-2">
-            <div className="w-full h-6 bg-gray-200 rounded-full overflow-hidden">
+          <div className="flex w-1/3 flex-col items-center gap-2">
+            <div className="h-6 w-full overflow-hidden rounded-full bg-gray-200">
               <div
-                className={`h-full transition-all duration-300 text-white flex justify-end pr-2 items-center ${progressBarColor}`}
+                className={`flex h-full items-center justify-end pr-2 text-white transition-all duration-300 ${progressBarColor}`}
                 style={{ width: `${progress}%` }}
               />
             </div>

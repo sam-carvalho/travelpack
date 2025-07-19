@@ -25,7 +25,7 @@ export function CategorySelect({
         userId,
         inputValue,
         tripId,
-        packingListId
+        packingListId,
       );
       setIsLoading(false);
       setOptions((prev) => [...prev, newOption]);

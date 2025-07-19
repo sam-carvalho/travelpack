@@ -18,19 +18,19 @@ export default function SignInPage() {
   }, [state, pending]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f0f9ff] px-4">
+    <div className="flex min-h-screen items-center justify-center bg-[#f0f9ff] px-4">
       <form
         action={action}
-        className="max-w-md w-full bg-white p-8 rounded-xl shadow-md space-y-4"
+        className="w-full max-w-md space-y-4 rounded-xl bg-white p-8 shadow-md"
       >
-        <h1 className="text-2xl font-bold text-blue-900 mb-4 text-center">
+        <h1 className="mb-4 text-center text-2xl font-bold text-blue-900">
           Sign In
         </h1>
 
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-blue-800 mb-1"
+            className="mb-1 block text-sm font-medium text-blue-800"
           >
             Email
           </label>
@@ -38,17 +38,17 @@ export default function SignInPage() {
             type="email"
             name="email"
             required
-            className="w-full px-4 py-2 border border-blue-200 rounded-md"
+            className="w-full rounded-md border border-blue-200 px-4 py-2"
           />
           {state?.errors?.email && (
-            <p className="text-red-600 text-sm mt-1">{state.errors.email[0]}</p>
+            <p className="mt-1 text-sm text-red-600">{state.errors.email[0]}</p>
           )}
         </div>
 
         <div>
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-blue-800 mb-1"
+            className="mb-1 block text-sm font-medium text-blue-800"
           >
             Password
           </label>
@@ -56,10 +56,10 @@ export default function SignInPage() {
             type="password"
             name="password"
             required
-            className="w-full px-4 py-2 border border-blue-200 rounded-md"
+            className="w-full rounded-md border border-blue-200 px-4 py-2"
           />
           {state?.errors?.password && (
-            <p className="text-red-600 text-sm mt-1">
+            <p className="mt-1 text-sm text-red-600">
               {state.errors.password[0]}
             </p>
           )}
@@ -68,7 +68,7 @@ export default function SignInPage() {
         <button
           disabled={pending}
           type="submit"
-          className="w-full bg-blue-900 text-white py-2 rounded-md font-semibold hover:bg-blue-800 transition"
+          className="w-full rounded-md bg-blue-900 py-2 font-semibold text-white transition hover:bg-blue-800"
         >
           {pending ? "Signing in..." : "Sign In"}
         </button>

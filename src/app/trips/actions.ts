@@ -23,7 +23,7 @@ export async function createTripAction(userId: string, input: CreateTripInput) {
 export async function updateTripAction(
   userId: string,
   tripId: string,
-  updates: Partial<CreateTripInput>
+  updates: Partial<CreateTripInput>,
 ) {
   const rawUpdates = {
     name: updates.name,
@@ -36,7 +36,7 @@ export async function updateTripAction(
   await service.updateTrip(
     userId,
     tripId,
-    rawUpdates as Partial<CreateTripInput>
+    rawUpdates as Partial<CreateTripInput>,
   );
 
   revalidatePath(`/trips/${tripId}`);

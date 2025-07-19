@@ -9,8 +9,8 @@ export default async function Hero() {
     "inline-block mt-8 bg-gradient-to-r from-amber-500 to-pink-500 text-white px-10 py-4 rounded-lg text-lg font-semibold hover:to-pink-600 transition-all duration-300";
 
   return (
-    <section className="max-w-screen-xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-16">
-      <div className="text-left flex-1">
+    <section className="mx-auto flex max-w-screen-xl flex-col items-center justify-between gap-16 lg:flex-row">
+      <div className="flex-1 text-left">
         <h1 className="text-6xl font-extrabold tracking-tight">
           Simplify Your Travel Planning
         </h1>
@@ -28,7 +28,7 @@ export default async function Hero() {
         )}
       </div>
 
-      <div className="p-6 rounded-xl flex-1">
+      <div className="flex-1 rounded-xl p-6">
         <Image
           src="/images/hero.png"
           alt="Travel planning illustration"

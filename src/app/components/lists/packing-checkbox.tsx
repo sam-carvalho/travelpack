@@ -19,7 +19,7 @@ export function PackingCheckbox({
         type="checkbox"
         name="packed"
         defaultChecked={defaultChecked}
-        className="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+        className="form-checkbox h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
         onChange={(e) => {
           e.currentTarget.form?.requestSubmit();
         }}

@@ -19,7 +19,7 @@ export const importPackingListSchema = z.object({
         quantity: z.number(),
         category: z.string(),
         packed: z.boolean(),
-      })
+      }),
     )
     .min(1),
   destination: z.string(),

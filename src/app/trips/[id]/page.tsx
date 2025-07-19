@@ -26,12 +26,12 @@ export default async function ViewTripPage({
   }
 
   return (
-    <div className="mt-10 rounded-xl overflow-hidden shadow-lg bg-zinc-50">
+    <div className="min-h-md mt-10 w-7xl overflow-hidden rounded-xl bg-zinc-50 shadow-lg">
       <div className="flex items-center justify-between p-12">
         <div className="flex items-center space-x-4">
           <Link
             href={`/trips/`}
-            className="text-sm text-gray-600 hover:text-gray-800 transition"
+            className="text-sm text-gray-600 transition hover:text-gray-800"
           >
             <ArrowLeftIcon className="size-4" />
           </Link>
@@ -39,17 +39,17 @@ export default async function ViewTripPage({
         </div>
         <Link
           href={`/trips/${trip.id}/packing-lists`}
-          className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-amber-500 to-pink-500 text-white rounded-lg hover:to-pink-800 transition-all duration-300"
+          className="rounded-lg bg-gradient-to-r from-amber-500 to-pink-500 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:to-pink-800"
         >
           Packing Lists
         </Link>
       </div>
       <div className="px-12 pb-6">
-        <p className="text-gray-600 mb-2">
+        <p className="mb-2 text-gray-600">
           <strong>Destination:</strong> {trip.destination}
         </p>
 
-        <p className="text-gray-600 mb-2">
+        <p className="mb-2 text-gray-600">
           <strong>Dates: </strong>
           {new Date(trip.startDate).toLocaleDateString("en-US", {
             month: "short",
@@ -65,13 +65,13 @@ export default async function ViewTripPage({
         </p>
 
         {trip.notes && (
-          <p className="text-gray-600 mb-2">
+          <p className="mb-2 text-gray-600">
             <strong>Notes:</strong> {trip.notes}
           </p>
         )}
       </div>
 
-      <div className="flex gap-4 px-12 pb-12 bg-gray-50">
+      <div className="flex gap-4 bg-gray-50 px-12 pb-12">
         <Link
           href={`/trips/${trip.id}/edit`}
           className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-800 hover:bg-gray-100"
@@ -81,7 +81,7 @@ export default async function ViewTripPage({
         <form action={deleteTripAction.bind(null, user.id, trip.id)}>
           <button
             type="submit"
-            className="rounded-md border border-red-300 px-3 py-1 text-sm text-red-600 hover:bg-red-50 cursor-pointer"
+            className="cursor-pointer rounded-md border border-red-300 px-3 py-1 text-sm text-red-600 hover:bg-red-50"
           >
             Delete
           </button>

@@ -8,7 +8,7 @@ export default async function Navigation() {
   const linkClasses = "hover:underline font-lg font-bold";
 
   return (
-    <header className="flex justify-between items-center">
+    <header className="flex items-center justify-between">
       <h1 className="text-2xl font-bold">
         <Link href="/">TravelPack</Link>
       </h1>

@@ -14,10 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-blue-100 text-gray-900 mt-8 mx-8 lg:mx-40">
+      <body className="mx-8 mt-8 min-h-screen bg-blue-100 text-gray-900 lg:mx-40">
         <Navigation />
         <Toaster position="top-right" />
-        <main>{children}</main>
+        <main id="main">{children}</main>
       </body>
     </html>
   );

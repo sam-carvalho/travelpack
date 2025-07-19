@@ -7,7 +7,7 @@ import { TripService } from "@/services/trip-service";
 
 export async function importPackingList(
   userId: string,
-  sharedList: SharedPackingList
+  sharedList: SharedPackingList,
 ) {
   const tripService = new TripService();
   const trip = await tripService.createTrip(userId, {
