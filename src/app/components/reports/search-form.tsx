@@ -14,6 +14,7 @@ export function PackingReportSearchForm() {
   const handleSearch = useDebouncedCallback(() => {
     const params = new URLSearchParams(searchParams);
 
+    /* eslint-disable @typescript-eslint/no-unused-expressions */
     keyword ? params.set("keyword", keyword) : params.delete("keyword");
 
     router.replace(`${pathname}?${params.toString()}`);

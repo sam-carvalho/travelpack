@@ -7,59 +7,47 @@ export default function SignUpPage() {
   const [state, action, pending] = useActionState(createUser, undefined);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#f0f9ff] px-4">
+    <div className="flex min-h-screen w-xl items-center justify-center">
       <form
         action={action}
-        className="w-full max-w-md space-y-4 rounded-xl bg-white p-8 shadow-md"
+        className="w-full max-w-lg space-y-10 rounded-xl bg-white p-8 shadow-md"
       >
-        <h1 className="mb-4 text-center text-2xl font-bold text-blue-900">
-          Sign Up
-        </h1>
+        <h1 className="mb-4 text-center text-2xl font-bold">Sign Up</h1>
 
         <div>
-          <label
-            className="mb-1 block text-sm font-medium text-blue-800"
-            htmlFor="name"
-          >
+          <label className="mb-1 block text-sm font-medium" htmlFor="name">
             Name
           </label>
           <input
             id="name"
             name="name"
-            placeholder="Name"
-            className="w-full rounded-md border border-blue-200 px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            className="w-full rounded-md border border-gray-200 px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
           />
         </div>
         {state?.errors?.name && <p>{state.errors.name}</p>}
 
         <div>
-          <label
-            className="mb-1 block text-sm font-medium text-blue-800"
-            htmlFor="email"
-          >
+          <label className="mb-1 block text-sm font-medium" htmlFor="email">
             Email
           </label>
           <input
             type="email"
             name="email"
             required
-            className="w-full rounded-md border border-blue-200 px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            className="w-full rounded-md border border-gray-200 px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
           />
         </div>
         {state?.errors?.email && <p>{state.errors.email}</p>}
 
         <div>
-          <label
-            htmlFor="password"
-            className="mb-1 block text-sm font-medium text-blue-800"
-          >
+          <label htmlFor="password" className="mb-1 block text-sm font-medium">
             Password
           </label>
           <input
             type="password"
             name="password"
             required
-            className="w-full rounded-md border border-blue-200 px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            className="w-full rounded-md border border-gray-200 px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
           />
         </div>
         {state?.errors?.password && (
@@ -76,7 +64,7 @@ export default function SignUpPage() {
         <button
           disabled={pending}
           type="submit"
-          className="w-full rounded-md bg-blue-900 py-2 font-semibold text-white transition hover:bg-blue-800"
+          className="w-full rounded-md bg-gradient-to-r from-amber-500 to-pink-500 py-2 font-semibold text-white transition-all duration-300 hover:to-pink-600"
         >
           Sign Up
         </button>

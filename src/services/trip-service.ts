@@ -34,6 +34,7 @@ export class TripService {
 
     const filters = parsed.data;
 
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     const where: any = { userId };
 
     if (filters.start) {
