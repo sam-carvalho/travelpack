@@ -8,7 +8,7 @@ import Link from "next/link";
 export default async function EditPackingListPage({
   params,
 }: {
-  params: { id: string; listId: string };
+  params: Promise<{ id: string; listId: string }>;
 }) {
   const { id, listId } = await params;
   const user = await getCurrentUser();

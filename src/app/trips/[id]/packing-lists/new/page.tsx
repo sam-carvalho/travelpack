@@ -8,7 +8,7 @@ import { TemplateService } from "@/services/template-service";
 export default async function NewPackingListPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   let user;
   try {
