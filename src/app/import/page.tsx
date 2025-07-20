@@ -6,10 +6,11 @@ import { importPackingList } from "./actions";
 export default async function ImportPage({
   searchParams,
 }: {
-  searchParams: { listId: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
 }) {
+  const listId =
+    typeof searchParams?.listId === "string" ? searchParams.listId : undefined;
   const user = await getCurrentUser();
-  const listId = searchParams.listId;
 
   if (!listId) redirect("/404");
 

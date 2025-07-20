@@ -64,7 +64,7 @@ export default function SignUpPage() {
         <button
           disabled={pending}
           type="submit"
-          className="w-full rounded-md bg-gradient-to-r from-amber-500 to-pink-500 py-2 font-semibold text-white transition-all duration-300 hover:to-pink-600"
+          className="w-full cursor-pointer rounded-md bg-gradient-to-r from-amber-500 to-pink-500 py-2 font-semibold text-white transition-all duration-300 hover:to-pink-600"
         >
           Sign Up
         </button>
