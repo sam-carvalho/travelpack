@@ -4,6 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { deleteTripAction } from "../actions";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
+import { DeleteTripButton } from "@/app/components/trips/delete-trip-button";
 
 export default async function ViewTripPage({
   params,
@@ -77,14 +78,11 @@ export default async function ViewTripPage({
         >
           Edit
         </Link>
-        <form action={deleteTripAction.bind(null, user.id, trip.id)}>
-          <button
-            type="submit"
-            className="cursor-pointer rounded-md border border-red-300 px-3 py-1 text-sm text-red-600 hover:bg-red-50"
-          >
-            Delete
-          </button>
-        </form>
+        <DeleteTripButton
+          userId={user.id}
+          tripId={trip.id}
+          deleteTripAction={deleteTripAction}
+        />
       </div>
     </div>
   );

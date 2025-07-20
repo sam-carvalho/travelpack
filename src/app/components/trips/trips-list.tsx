@@ -2,6 +2,7 @@ import Link from "next/link";
 import { deleteTripAction } from "@/app/trips/actions";
 import React from "react";
 import { Trip } from "@/generated/prisma";
+import { DeleteTripButton } from "./delete-trip-button";
 
 export default async function TripsList({
   userId,
@@ -13,10 +14,7 @@ export default async function TripsList({
   if (trips.length === 0) {
     return (
       <div className="py-8 text-center text-gray-500">
-        <p className="text-lg">You don&quot;t have any trips yet.</p>
-        <p className="mt-2 text-sm">
-          Click &quot;Create Trip&quot; to get started.
-        </p>
+        <p className="text-lg">Click &quot;New Trip&quot; to get started.</p>
       </div>
     );
   }
@@ -55,14 +53,11 @@ export default async function TripsList({
               >
                 Edit
               </Link>
-              <form action={deleteTripAction.bind(null, userId, trip.id)}>
-                <button
-                  type="submit"
-                  className="rounded-md border border-red-300 px-3 py-1 text-sm text-red-600 hover:bg-red-50"
-                >
-                  Delete
-                </button>
-              </form>
+              <DeleteTripButton
+                userId={userId}
+                tripId={trip.id}
+                deleteTripAction={deleteTripAction}
+              />
             </div>
           </div>
         ))}
@@ -118,14 +113,11 @@ export default async function TripsList({
                     >
                       Edit
                     </Link>
-                    <form action={deleteTripAction.bind(null, userId, trip.id)}>
-                      <button
-                        type="submit"
-                        className="rounded-md border border-red-300 px-3 py-1 text-sm text-red-600 hover:bg-red-50"
-                      >
-                        Delete
-                      </button>
-                    </form>
+                    <DeleteTripButton
+                      userId={userId}
+                      tripId={trip.id}
+                      deleteTripAction={deleteTripAction}
+                    />
                   </div>
                 </td>
               </tr>

@@ -20,14 +20,6 @@ export default async function ViewPackingListsPage({
   const service = new PackingListService();
   const packingLists = await service.getPackingListsByTrip(id);
 
-  if (!packingLists) {
-    return (
-      <p className="px-12 pb-12">
-        No packing lists found. Start by creating one!
-      </p>
-    );
-  }
-
   return (
     <div className="min-h-lg mt-10 w-7xl overflow-hidden rounded-xl bg-zinc-50 pb-12 shadow-lg">
       <div className="flex items-center justify-between p-12">
@@ -47,7 +39,14 @@ export default async function ViewPackingListsPage({
           New Packing List
         </Link>
       </div>
-      <PackingLists lists={packingLists} />
+      {!packingLists.length && (
+        <p className="px-20 pb-12 text-gray-700">
+          Click &quot;New Packing List&quot; to get started.
+        </p>
+      )}
+      {packingLists && packingLists.length > 0 && (
+        <PackingLists lists={packingLists} />
+      )}
     </div>
   );
 }

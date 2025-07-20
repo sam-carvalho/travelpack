@@ -40,7 +40,7 @@ export async function createPackingList(_: unknown, formData: FormData) {
 
   const listService = new PackingListService();
   const newList = await listService.createPackingList(tripId, {
-    name: `From Template: ${title}`,
+    name: title,
     tripId,
   });
 
@@ -97,8 +97,8 @@ export async function updatePackingList(id: string, formData: FormData) {
 }
 
 export async function deletePackingListAction(
-  tripId: string,
   packingListId: string,
+  tripId: string,
 ) {
   const service = new PackingListService();
   await service.deletePackingList(packingListId);

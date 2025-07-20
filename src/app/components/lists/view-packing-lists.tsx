@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { deletePackingListAction } from "../../trips/[id]/packing-lists/actions";
-import { PackingList } from "../../lib/types";
+import { deletePackingListAction } from "@/app/trips/[id]/packing-lists/actions";
+import { PackingList } from "@/app/lib/types";
 import React from "react";
+import { DeleteListButton } from "./delete-list-button";
 
 export default async function PackingLists({
   lists,
@@ -52,20 +53,11 @@ export default async function PackingLists({
                       >
                         Edit
                       </Link>
-                      <form
-                        action={deletePackingListAction.bind(
-                          null,
-                          list.tripId,
-                          list.id,
-                        )}
-                      >
-                        <button
-                          type="submit"
-                          className="cursor-pointer rounded-md border border-red-300 px-3 py-1 text-sm text-red-600 hover:bg-red-50"
-                        >
-                          Delete
-                        </button>
-                      </form>
+                      <DeleteListButton
+                        packingListId={list.id}
+                        tripId={list.tripId}
+                        deletePackingListAction={deletePackingListAction}
+                      />
                     </div>
                   </td>
                 </tr>

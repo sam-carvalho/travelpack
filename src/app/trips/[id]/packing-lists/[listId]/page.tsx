@@ -10,6 +10,7 @@ import { redirect } from "next/navigation";
 import { getProgressCounts } from "@/app/utils/getProgressCount";
 import { CategoryService } from "@/services/category-service";
 import { PackingListTable } from "@/app/components/lists/view-list-table";
+import { DeleteListButton } from "@/app/components/lists/delete-list-button";
 
 export default async function ViewPackingListPage({
   params,
@@ -74,14 +75,13 @@ export default async function ViewPackingListPage({
           />
         </div>
         <div className="flex justify-end bg-gray-50">
-          <form action={deletePackingListAction.bind(null, id, listId)}>
-            <button
-              type="submit"
-              className="h-14 cursor-pointer rounded-md border border-red-300 px-3 py-2 text-sm text-red-600 hover:bg-red-50 md:h-10"
-            >
-              Delete Packing List
-            </button>
-          </form>
+          <DeleteListButton
+            packingListId={list.id}
+            tripId={list.tripId}
+            deletePackingListAction={deletePackingListAction}
+            label="Delete Packing List"
+            className="h-14 cursor-pointer rounded-md border border-red-300 px-3 py-2 text-sm text-red-600 hover:bg-red-50 md:h-10"
+          />
         </div>
       </div>
     </div>
