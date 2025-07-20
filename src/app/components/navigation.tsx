@@ -4,7 +4,12 @@ import { LogoutButton } from "./logout-button";
 import NavigationItems from "./navigation-items";
 
 export default async function Navigation() {
-  const user = await getCurrentUser();
+  let user;
+  try {
+    user = await getCurrentUser();
+  } catch (err) {
+    console.error(err);
+  }
 
   const navLinks = user ? (
     <>

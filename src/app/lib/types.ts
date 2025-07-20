@@ -66,3 +66,16 @@ export interface CategorySelectProps {
 export interface Templates extends Template {
   items: Item[];
 }
+
+export interface PackingReport {
+  tripId: string;
+  tripName: string;
+  destination: string;
+  startDate: string;
+  endDate: string;
+  items: { id: string; name: string; quantity: number }[];
+}
+
+export interface SearchFilters {
+  keyword: string;
+}

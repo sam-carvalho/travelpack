@@ -1,5 +1,6 @@
 import prisma from "@/app/lib/prisma";
-import { CreateTripInput } from "@/app/lib/types";
+import { CreateTripInput, SearchFilters } from "@/app/lib/types";
+import { SearchFiltersSchema } from "@/app/lib/validation/search-filters";
 
 export class TripService {
   async createTrip(userId: string, input: CreateTripInput) {
@@ -19,6 +20,69 @@ export class TripService {
         packingLists: {
           include: {
             items: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getFilteredTripsByUser(userId: string, filtersRaw: SearchFilters) {
+    const parsed = SearchFiltersSchema.safeParse(filtersRaw);
+    if (!parsed.success) {
+      throw new Error("Invalid search filters");
+    }
+
+    const filters = parsed.data;
+
+    const where: any = { userId };
+
+    if (filters.start) {
+      where.startDate = { gte: filters.start };
+    }
+
+    if (filters.end) {
+      where.endDate = {
+        ...(where.endDate || {}),
+        lte: filters.end,
+      };
+    }
+
+    if (filters.keyword) {
+      where.OR = [
+        { name: { contains: filters.keyword, mode: "insensitive" } },
+        { destination: { contains: filters.keyword, mode: "insensitive" } },
+        {
+          packingLists: {
+            some: {
+              items: {
+                some: {
+                  name: {
+                    contains: filters.keyword,
+                    mode: "insensitive",
+                  },
+                },
+              },
+            },
+          },
+        },
+      ];
+    }
+
+    return prisma.trip.findMany({
+      where,
+      include: {
+        packingLists: {
+          include: {
+            items: filters.keyword
+              ? {
+                  where: {
+                    name: {
+                      contains: filters.keyword,
+                      mode: "insensitive",
+                    },
+                  },
+                }
+              : true,
           },
         },
       },
