@@ -7,7 +7,7 @@ import { getServerSession } from "next-auth";
 export default async function Navigation() {
   const session = await getServerSession(authOptions);
 
-  const navLinks = !session?.user ? (
+  const navLinks = session?.user ? (
     <>
       <Link
         href="/trips"
