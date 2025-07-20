@@ -3,6 +3,7 @@ import "./globals.css";
 import Navigation from "./components/navigation";
 import { Toaster } from "react-hot-toast";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "TravelPack",
@@ -20,6 +21,7 @@ export default function RootLayout({
         <Toaster position="top-right" />
         <main id="main">{children}</main>
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );

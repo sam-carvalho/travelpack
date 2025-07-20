@@ -18,7 +18,7 @@ export default function SignInPage() {
   }, [state, pending]);
 
   return (
-    <div className="flex min-h-screen w-xl items-center justify-center">
+    <div className="mt-14 flex w-xl items-center justify-center sm:mt-50">
       <form
         action={action}
         className="w-full max-w-lg space-y-12 rounded-xl bg-white p-8 shadow-md"
