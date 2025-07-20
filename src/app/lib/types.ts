@@ -1,4 +1,4 @@
-import { Item, Template } from "@/generated/prisma";
+import { Template } from "@/generated/prisma";
 
 export interface ReportRecord {
   label: string;
@@ -64,7 +64,12 @@ export interface CategorySelectProps {
 }
 
 export interface Templates extends Template {
-  items: Item[];
+  items: {
+    id: string;
+    name: string;
+    quantity: number;
+    categoryId: string | null;
+  }[];
 }
 
 export interface PackingReport {

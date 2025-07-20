@@ -2,7 +2,7 @@ import prisma from "@/app/lib/prisma";
 import { Item } from "@/generated/prisma";
 
 export class ItemService {
-  async addItem(packingListId: string, data: Omit<Item, "id">) {
+  async addItem(packingListId: string, data: Omit<Item, "id" | "createdAt">) {
     return prisma.item.create({
       data: {
         ...data,
@@ -11,7 +11,7 @@ export class ItemService {
     });
   }
 
-  async addManyItems(data: Omit<Item, "id">[]) {
+  async addManyItems(data: Omit<Item, "id" | "createdAt">[]) {
     await prisma.item.createMany({
       data,
     });

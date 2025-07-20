@@ -1,8 +1,8 @@
-import { PackingReport } from "@/app/lib/types";
+import { PackingReport, SearchFilters } from "@/app/lib/types";
 
 export abstract class ReportBase {
   abstract generate(
     userId: string,
-    filters: Record<string, unknown>,
+    filters: SearchFilters,
   ): Promise<PackingReport[]>;
 }

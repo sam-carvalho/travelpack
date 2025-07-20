@@ -24,7 +24,7 @@ export async function importPackingList(
     tripId: trip.id,
   });
 
-  const items = (sharedList.items as Item[]).map((item) => ({
+  const items = (sharedList.items as unknown as Item[]).map((item) => ({
     name: item.name,
     quantity: item.quantity,
     categoryId: item.categoryId ?? null,
