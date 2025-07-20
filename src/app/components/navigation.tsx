@@ -1,17 +1,13 @@
 import Link from "next/link";
-import { getCurrentUser } from "@/app/lib/auth";
+import { authOptions } from "@/app/lib/auth";
 import { LogoutButton } from "./logout-button";
 import NavigationItems from "./navigation-items";
+import { getServerSession } from "next-auth";
 
 export default async function Navigation() {
-  let user;
-  try {
-    user = await getCurrentUser();
-  } catch (err) {
-    console.error(err);
-  }
+  const session = await getServerSession(authOptions);
 
-  const navLinks = user ? (
+  const navLinks = !session?.user ? (
     <>
       <Link
         href="/trips"
