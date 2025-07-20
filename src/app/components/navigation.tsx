@@ -39,7 +39,7 @@ export default async function Navigation() {
       </Link>
       <Link
         href="/signup"
-        className="block py-2 text-lg font-bold text-gray-600 hover:text-gray-800"
+        className="block py-2 text-lg font-bold text-gray-600 hover:underline"
       >
         Sign Up
       </Link>

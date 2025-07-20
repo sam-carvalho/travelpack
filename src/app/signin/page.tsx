@@ -33,7 +33,7 @@ export default function SignInPage() {
             type="email"
             name="email"
             required
-            className="w-full rounded-md border border-gray-200 px-4 py-2"
+            className="w-full rounded-md border border-gray-200 bg-stone-50 px-4 py-2"
           />
           {state?.errors?.email && (
             <p className="mt-1 text-sm text-red-600">{state.errors.email[0]}</p>
@@ -48,7 +48,7 @@ export default function SignInPage() {
             type="password"
             name="password"
             required
-            className="w-full rounded-md border border-gray-200 px-4 py-2"
+            className="w-full rounded-md border border-gray-200 bg-stone-50 px-4 py-2"
           />
           {state?.errors?.password && (
             <p className="mt-1 text-sm text-red-600">
@@ -64,6 +64,12 @@ export default function SignInPage() {
         >
           {pending ? "Signing in..." : "Sign In"}
         </button>
+
+        <div>
+          {state?.message && (
+            <p className="mt-1 text-sm text-red-600">{state.message}</p>
+          )}
+        </div>
       </form>
     </div>
   );
