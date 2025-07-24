@@ -1,11 +1,11 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { Suspense, useActionState, useEffect } from "react";
 import { signInUser } from "./actions";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 
-export default function SignInPage() {
+function SignInForm() {
   const [state, action, pending] = useActionState(signInUser, undefined);
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/trips";
@@ -75,5 +75,13 @@ export default function SignInPage() {
         </div>
       </form>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense>
+      <SignInForm />
+    </Suspense>
   );
 }
