@@ -18,7 +18,9 @@ export default async function ReportsPage(props: {
   }>;
 }) {
   const user = await getCurrentUser();
-  if (!user) redirect("/signin");
+  if (!user) {
+    redirect("/signin?callbackUrl=/reports");
+  }
 
   const searchParams = await props.searchParams;
   const keyword = searchParams?.keyword ?? "";

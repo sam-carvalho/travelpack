@@ -11,14 +11,13 @@ export default async function ViewTripPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  let user;
-  try {
-    user = await getCurrentUser();
-  } catch (err) {
-    console.error(err);
-    redirect("/signin");
-  }
   const { id } = await params;
+
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect(`/signin?callbackUrl=/trips/${id}`);
+  }
+
   const service = new TripService();
   const trip = await service.getTripById(user.id, id);
 
@@ -27,7 +26,7 @@ export default async function ViewTripPage({
   }
 
   return (
-    <div className="min-h-md mt-10 w-5xl overflow-hidden rounded-xl bg-zinc-50 shadow-lg">
+    <div className="min-h-md mt-10 w-7xl overflow-hidden rounded-xl bg-zinc-50 shadow-lg">
       <div className="flex items-center justify-between p-12">
         <div className="flex items-center space-x-4">
           <Link

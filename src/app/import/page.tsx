@@ -8,11 +8,10 @@ export default async function ImportPage({
 }: {
   searchParams: Promise<{ listId: string }>;
 }) {
-  const user = await getCurrentUser();
   const listId = (await searchParams).listId;
-
   if (!listId) redirect("/404");
 
+  const user = await getCurrentUser();
   if (!user) {
     redirect(`/signin?callbackUrl=/import?listId=${listId}`);
   }

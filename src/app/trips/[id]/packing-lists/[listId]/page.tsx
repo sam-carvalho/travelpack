@@ -17,15 +17,13 @@ export default async function ViewPackingListPage({
 }: {
   params: Promise<{ id: string; listId: string }>;
 }) {
-  let user;
-  try {
-    user = await getCurrentUser();
-  } catch (err) {
-    console.error(err);
-    redirect("/signin");
+  const { id, listId } = await params;
+
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect(`/signin?callbackUrl=/trips/${id}/packing-lists/${listId}`);
   }
 
-  const { id, listId } = await params;
   const listService = new PackingListService();
   const categoryService = new CategoryService();
   const [list, categories] = await Promise.all([

@@ -20,6 +20,10 @@ const PackingListSchema = z.object({
 export async function createPackingList(_: unknown, formData: FormData) {
   const user = await getCurrentUser();
 
+  if (!user) {
+    redirect("/signin?callbackUrl=/trips");
+  }
+
   const result = PackingListSchema.safeParse({
     title: formData.get("title"),
     tripId: formData.get("tripId"),
@@ -69,6 +73,10 @@ export async function createPackingList(_: unknown, formData: FormData) {
 
 export async function updatePackingList(id: string, formData: FormData) {
   const user = await getCurrentUser();
+
+  if (!user) {
+    redirect("/signin?callbackUrl=/trips");
+  }
 
   const result = PackingListSchema.safeParse({
     title: formData.get("title"),

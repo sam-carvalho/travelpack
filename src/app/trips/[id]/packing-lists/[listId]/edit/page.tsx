@@ -11,7 +11,12 @@ export default async function EditPackingListPage({
   params: Promise<{ id: string; listId: string }>;
 }) {
   const { id, listId } = await params;
+
   const user = await getCurrentUser();
+  if (!user) {
+    redirect(`/signin?callbackUrl=/trips/${id}/packing-lists/${listId}/edit`);
+  }
+
   const listService = new PackingListService();
   const list = await listService.getPackingListById(listId);
 

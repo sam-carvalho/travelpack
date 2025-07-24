@@ -10,14 +10,13 @@ export default async function EditTripPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  let user;
-  try {
-    user = await getCurrentUser();
-  } catch (err) {
-    console.error(err);
-    redirect("/signin");
-  }
   const { id } = await params;
+
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect(`/signin?callbackUrl=/trips/${id}/edit`);
+  }
+
   const service = new TripService();
   const trip = await service.getTripById(user.id, id);
 

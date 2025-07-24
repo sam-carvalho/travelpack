@@ -10,13 +10,13 @@ export default async function ViewPackingListsPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  try {
-    await getCurrentUser();
-  } catch (err) {
-    console.error(err);
-    redirect("/signin");
-  }
   const { id } = await params;
+
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect(`/signin?callbackUrl=/trips/${id}/packing-lists`);
+  }
+
   const service = new PackingListService();
   const packingLists = await service.getPackingListsByTrip(id);
 

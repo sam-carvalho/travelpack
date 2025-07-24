@@ -62,7 +62,7 @@ export const getCurrentUser = async () => {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.email) {
-    throw new Error("Unauthorized");
+    return null;
   }
 
   const user = await prisma.user.findUnique({
@@ -70,7 +70,7 @@ export const getCurrentUser = async () => {
   });
 
   if (!user) {
-    throw new Error("User not found");
+    return null;
   }
 
   return user;

@@ -3,19 +3,22 @@
 import { useActionState, useEffect } from "react";
 import { signInUser } from "./actions";
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 export default function SignInPage() {
   const [state, action, pending] = useActionState(signInUser, undefined);
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/trips";
 
   useEffect(() => {
     if (!pending && !state?.errors && state?.email && state?.password) {
       signIn("credentials", {
         email: state.email,
         password: state.password,
-        callbackUrl: "/trips",
+        callbackUrl,
       });
     }
-  }, [state, pending]);
+  }, [state, pending, callbackUrl]);
 
   return (
     <div className="xs:mt-10 mt-8 flex w-xl items-center justify-center sm:mt-50">

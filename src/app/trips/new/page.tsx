@@ -5,12 +5,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function NewTripPage() {
-  let user;
-  try {
-    user = await getCurrentUser();
-  } catch (err) {
-    console.error(err);
-    redirect("/signin");
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect(`/signin?callbackUrl=/trips/new`);
   }
 
   return (

@@ -5,13 +5,11 @@ import { redirect } from "next/navigation";
 import { TripService } from "@/services/trip-service";
 
 export default async function TripsPage() {
-  let user;
-  try {
-    user = await getCurrentUser();
-  } catch (err) {
-    console.error(err);
-    redirect("/signin");
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect("/signin?callbackUrl=/trips");
   }
+
   const service = new TripService();
   const trips = await service.getTripsByUser(user.id);
 

@@ -10,14 +10,13 @@ export default async function NewPackingListPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  let user;
-  try {
-    user = await getCurrentUser();
-  } catch {
-    redirect("/signin");
+  const { id } = await params;
+
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect(`/signin?callbackUrl=/trips/${id}/packing-lists/new`);
   }
 
-  const { id } = await params;
   const templateService = new TemplateService();
   const templates = await templateService.getTemplatesByUser(user.id);
 

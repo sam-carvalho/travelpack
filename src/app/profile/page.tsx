@@ -8,7 +8,9 @@ import { ManageTemplates } from "../components/profile/manage-template";
 
 export default async function ProfilePage() {
   const user = await getCurrentUser();
-  if (!user) redirect("/signin");
+  if (!user) {
+    redirect("/signin?callbackUrl=/profile");
+  }
 
   const categoryService = new CategoryService();
   const templateService = new TemplateService();
