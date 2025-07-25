@@ -34,7 +34,6 @@ export class CategoryService {
     try {
       await prisma.category.createMany({
         data: defaultCategories.map((name) => ({ name, userId })),
-        skipDuplicates: true,
       });
     } catch (error) {
       console.error("Failed to create default categories:", error);

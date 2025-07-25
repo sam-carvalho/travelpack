@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function GlobalError({
   /* eslint-disable @typescript-eslint/no-unused-vars */
   error,
@@ -23,12 +25,12 @@ export default function GlobalError({
               We are already working to solve the problem.{" "}
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <button
+              <Link
                 className="cursor-pointer rounded-xl bg-gradient-to-r from-amber-500 to-pink-500 px-4 py-3 text-lg font-semibold text-white transition-all duration-300 hover:to-pink-600"
-                onClick={() => reset()}
+                href="/"
               >
                 Go back home
-              </button>
+              </Link>
             </div>
           </div>
         </div>

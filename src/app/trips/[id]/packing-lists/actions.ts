@@ -147,7 +147,8 @@ export async function addPackingItemAction(
   await service.addItem(packingListId, {
     name: input.name,
     quantity: input.quantity,
-    categoryId: input.categoryId ?? null,
+    categoryId:
+      input.categoryId && input.categoryId !== "" ? input.categoryId : null,
     packed: false,
     packingListId,
   });
@@ -164,7 +165,8 @@ export async function updatePackingItemAction(
   await service.updateItem(itemId, {
     name: data.name,
     quantity: data.quantity,
-    categoryId: data.categoryId,
+    categoryId:
+      data.categoryId && data.categoryId !== "" ? data.categoryId : null,
   });
   revalidatePath(`/trips/${tripId}/packing-lists/${packingListId}`);
 }

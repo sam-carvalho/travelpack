@@ -48,6 +48,8 @@ export function ManageUserCategoriesForm({
   };
 
   const handleDelete = (categoryId: string) => {
+    const confirmed = confirm("Are you sure you want to delete this item?");
+    if (!confirmed) return;
     startTransition(async () => {
       await deleteCategoryAction(userId, categoryId);
       setLocalCategories((prev) => prev.filter((cat) => cat.id !== categoryId));

@@ -96,7 +96,7 @@ export function PackingListTable({
                     {item.quantity}
                   </td>
                   <td className="px-4 py-4 font-medium text-gray-800">
-                    {item.category?.name || "No Category"}
+                    {item.category?.name || "Uncategorized"}
                   </td>
                   <td className="px-5 py-4">
                     <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
@@ -168,7 +168,7 @@ export function PackingListTable({
           >
             <div className="mb-2 flex items-center justify-between">
               <span className="text-sm font-semibold text-gray-600">
-                {item.category?.name || "No Category"}
+                {item.category?.name || "Uncategorized"}
               </span>
               <PackingCheckbox
                 defaultChecked={item.packed}

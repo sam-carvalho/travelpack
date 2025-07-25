@@ -53,11 +53,6 @@ function SignInForm() {
             required
             className="w-full rounded-md border border-gray-200 bg-stone-50 px-4 py-2"
           />
-          {state?.errors?.password && (
-            <p className="mt-1 text-sm text-red-600">
-              {state.errors.password[0]}
-            </p>
-          )}
         </div>
 
         <button
@@ -67,6 +62,12 @@ function SignInForm() {
         >
           {pending ? "Signing in..." : "Sign In"}
         </button>
+
+        {state?.errors?.password && (
+          <p className="mt-2 text-sm text-red-600">
+            Invalid email or password.
+          </p>
+        )}
 
         <div>
           {state?.message && (

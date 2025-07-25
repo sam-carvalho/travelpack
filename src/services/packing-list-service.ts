@@ -83,8 +83,8 @@ export class PackingListService {
       },
     });
 
-    const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
-    return `https://${baseUrl}/import?listId=${shared.id}`;
+    const baseUrl = process.env.NEXT_PUBLIC_VERCEL_APP_URL;
+    return `${baseUrl}/import?listId=${shared.id}`;
   }
 
   async getExportedPackingListById(listId: string) {

@@ -98,7 +98,7 @@ export class ItemService {
       },
       {
         label: "Most Used Category",
-        value: categoryName?.name ?? "No Category",
+        value: categoryName?.name ?? "Uncategorized",
       },
       { label: "Total Number of Trips", value: totalTrips },
     ];
@@ -118,7 +118,7 @@ export class ItemService {
 
     const counts: Record<string, number> = {};
     for (const item of items) {
-      const category = item.category?.name ?? "No Category";
+      const category = item.category?.name ?? "Uncategorized";
       counts[category] = (counts[category] || 0) + item.quantity;
     }
 

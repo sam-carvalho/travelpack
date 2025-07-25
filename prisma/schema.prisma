@@ -96,7 +96,7 @@ model Item {
 
 model Category {
   id           String         @id @default(uuid())
-  name         String         @unique
+  name         String
   userId       String
   user         User           @relation(fields: [userId], references: [id])
   createdAt    DateTime       @default(now())

@@ -24,7 +24,9 @@ export default function SignUpPage() {
             className="w-full rounded-md border border-gray-200 px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
           />
         </div>
-        {state?.errors?.name && <p>{state.errors.name}</p>}
+        {state?.errors?.name && (
+          <p className="text-red-600">{state.errors.name}</p>
+        )}
 
         <div>
           <label className="mb-1 block text-sm font-medium" htmlFor="email">
@@ -37,7 +39,9 @@ export default function SignUpPage() {
             className="w-full rounded-md border border-gray-200 px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
           />
         </div>
-        {state?.errors?.email && <p>{state.errors.email}</p>}
+        {state?.errors?.email && (
+          <p className="text-red-600">{state.errors.email}</p>
+        )}
 
         <div>
           <label htmlFor="password" className="mb-1 block text-sm font-medium">
@@ -51,7 +55,7 @@ export default function SignUpPage() {
           />
         </div>
         {state?.errors?.password && (
-          <div>
+          <div className="text-red-600">
             <p>Password must:</p>
             <ul>
               {state.errors.password.map((error) => (
