@@ -1,38 +1,20 @@
 "use client";
 
-import Link from "next/link";
+import "./globals.css";
 
-export default function GlobalError({
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
+export default function GlobalError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
-    <html>
-      <body className="mx-8 mt-8 min-h-screen overflow-visible bg-blue-100 text-gray-900 lg:mx-70">
-        <div className="grid h-full place-items-center px-6 py-24 sm:py-32 lg:px-8">
-          <div className="text-center">
-            <p className="mb-4 text-7xl font-extrabold tracking-tight text-amber-600 lg:text-9xl">
-              500
-            </p>
-            <h1 className="mt-4 text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
-              Internal Server Error.
-            </h1>
-            <p className="m-4 text-lg font-light text-gray-500">
-              We are already working to solve the problem.{" "}
-            </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Link
-                className="cursor-pointer rounded-xl bg-gradient-to-r from-amber-500 to-pink-500 px-4 py-3 text-lg font-semibold text-white transition-all duration-300 hover:to-pink-600"
-                href="/"
-              >
-                Go back home
-              </Link>
-            </div>
-          </div>
+    <html lang="en">
+      <body className="min-h-screen">
+        <div className="mx-auto max-w-xl px-4 py-28 text-center sm:px-6">
+          <h1 className="text-4xl font-bold tracking-tight">Something went wrong</h1>
+          <p className="mt-4 text-muted">Please try again.</p>
+          <button
+            onClick={reset}
+            className="mt-8 rounded-xl bg-accent px-5 py-3 font-semibold text-on-accent hover:bg-accent-strong"
+          >
+            Try again
+          </button>
         </div>
       </body>
     </html>

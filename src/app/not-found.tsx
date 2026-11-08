@@ -2,26 +2,18 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <>
-      <main className="grid h-full place-items-center px-6 py-24 sm:py-32 lg:px-8">
-        <div className="text-center">
-          <p className="text-base font-semibold text-indigo-400">404</p>
-          <h1 className="mt-4 text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">
-            Page not found
-          </h1>
-          <p className="mt-6 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">
-            Sorry, we couldn’t find the page you’re looking for.
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            <Link
-              href="/"
-              className="cursor-pointer rounded-md bg-gradient-to-r from-amber-500 to-pink-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:to-pink-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-600"
-            >
-              Go back home
-            </Link>
-          </div>
-        </div>
-      </main>
-    </>
+    <div className="mx-auto max-w-xl px-4 py-28 text-center sm:px-6">
+      <p className="font-semibold text-accent">404</p>
+      <h1 className="mt-3 text-4xl font-bold tracking-tight">Page not found</h1>
+      <p className="mt-4 text-muted">
+        TravelPack is now an iPhone app, so the old web app pages are gone.
+      </p>
+      <Link
+        href="/"
+        className="mt-8 inline-flex rounded-xl bg-accent px-5 py-3 font-semibold text-on-accent hover:bg-accent-strong"
+      >
+        Go to the home page
+      </Link>
+    </div>
   );
 }

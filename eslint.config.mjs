@@ -7,7 +7,6 @@ export default defineConfig([
   ...nextTs,
   globalIgnores([
     ".next/**",
-    "src/generated/prisma/**",
     "next-env.d.ts",
     "jest.config.js",
   ]),

@@ -10,7 +10,7 @@ module.exports = {
   transform: {
     ...tsJestTransformCfg,
   },
-  testPathIgnorePatterns: ["/node_modules/", "<rootDir>/src/test-utils/"],
+  testPathIgnorePatterns: ["/node_modules/"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },

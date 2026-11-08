@@ -1,25 +1,37 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import Navigation from "./components/navigation";
-import { Toaster } from "react-hot-toast";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
+import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "TravelPack",
+  title: { default: `${site.name}: packing lists for iPhone`, template: `%s · ${site.name}` },
+  description: site.description,
+  openGraph: { siteName: site.name, type: "website" },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fffaf6" },
+    { media: "(prefers-color-scheme: dark)", color: "#14110f" },
+  ],
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className="mx-8 mt-8 min-h-screen overflow-visible bg-blue-100 text-gray-900 lg:mx-70">
-        <Navigation />
-        <Toaster position="top-right" />
+      <body className="min-h-screen">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-30 focus:rounded-lg focus:bg-surface focus:px-4 focus:py-2"
+        >
+          Skip to content
+        </a>
+        <Header />
         <main id="main">{children}</main>
+        <Footer />
         <SpeedInsights />
         <Analytics />
       </body>
