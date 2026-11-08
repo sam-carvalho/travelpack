@@ -47,7 +47,7 @@ export function EditPackingItemModal({
     e.preventDefault();
     startTransition(async () => {
       try {
-        await updatePackingItemAction(item.id, tripId, item.packingListId, {
+        await updatePackingItemAction(item.id, {
           name,
           quantity,
           categoryId: categoryId || null,

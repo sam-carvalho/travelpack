@@ -1,6 +1,11 @@
 import prisma from "@/app/lib/prisma";
-import { PackingListItem } from "@/app/lib/types";
 import { PackingList, Prisma } from "@/generated/prisma/client";
+
+export interface SharedItem {
+  name: string;
+  quantity: number;
+  categoryName: string | null;
+}
 
 export class PackingListService {
   async createPackingList(tripId: string, data: Omit<PackingList, "id">) {
@@ -69,7 +74,7 @@ export class PackingListService {
     startDate: Date;
     endDate: Date;
     notes?: string;
-    items?: PackingListItem[];
+    items: SharedItem[];
   }) {
     const shared = await prisma.sharedPackingList.create({
       data: {

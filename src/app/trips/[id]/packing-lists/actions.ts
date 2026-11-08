@@ -7,13 +7,22 @@ import { ItemService } from "@/services/item-service";
 import { CategoryService } from "@/services/category-service";
 import { formatOption } from "@/app/utils/formatSelectOption";
 import { TemplateService } from "@/services/template-service";
-import { PackingList } from "@/app/lib/types";
 import { TripService } from "@/services/trip-service";
 import { z } from "zod";
 import { getCurrentUser } from "@/app/lib/auth";
+import {
+  assertItemOwner,
+  assertListOwner,
+  requireUser,
+  resolveOwnedCategoryId,
+} from "@/app/lib/authz";
+import {
+  CategoryNameSchema,
+  ItemInputSchema,
+} from "@/app/lib/validation/inputs";
 
 const PackingListSchema = z.object({
-  title: z.string().min(1),
+  title: z.string().trim().min(1).max(100),
   tripId: z.uuid(),
 });
 
@@ -89,7 +98,7 @@ export async function updatePackingList(id: string, formData: FormData) {
     };
   }
 
-  const { title, tripId } = result.data;
+  const { title } = result.data;
 
   const listService = new PackingListService();
   const packingList = await listService.getPackingListById(id);
@@ -100,124 +109,131 @@ export async function updatePackingList(id: string, formData: FormData) {
 
   await listService.updatePackingList(id, { name: String(title) });
 
+  const tripId = packingList.tripId;
   revalidatePath(`/trips/${tripId}/packing-lists/${id}/edit`);
   redirect(`/trips/${tripId}/packing-lists/${id}/edit`);
 }
 
-export async function deletePackingListAction(
-  packingListId: string,
-  tripId: string,
-) {
-  const service = new PackingListService();
-  await service.deletePackingList(packingListId);
+export async function deletePackingListAction(packingListId: string) {
+  const user = await requireUser();
+  const list = await assertListOwner(user.id, packingListId);
 
-  revalidatePath(`/trips/${tripId}/packing-lists`);
-  redirect(`/trips/${tripId}/packing-lists`);
+  const service = new PackingListService();
+  await service.deletePackingList(list.id);
+
+  revalidatePath(`/trips/${list.tripId}/packing-lists`);
+  redirect(`/trips/${list.tripId}/packing-lists`);
 }
 
-export async function deletePackingListItemAction(
-  tripId: string,
-  itemId: string,
-  packingListId: string,
-) {
-  const service = new ItemService();
-  await service.deleteItem(itemId);
+export async function deletePackingListItemAction(itemId: string) {
+  const user = await requireUser();
+  const item = await assertItemOwner(user.id, itemId);
 
-  revalidatePath(`/trips/${tripId}/packing-lists/${packingListId}`);
+  const service = new ItemService();
+  await service.deleteItem(item.id);
+
+  revalidatePath(`/trips/${item.tripId}/packing-lists/${item.packingListId}`);
 }
 
 export async function togglePackedAction(formData: FormData) {
-  const tripId = formData.get("tripId") as string;
-  const packingListId = formData.get("packingListId") as string;
-  const itemId = formData.get("itemId") as string;
+  const user = await requireUser();
+  const item = await assertItemOwner(user.id, formData.get("itemId"));
   const packed = formData.get("packed") === "on";
 
   const service = new ItemService();
-  await service.updateItem(itemId, { packed });
+  await service.updateItem(item.id, { packed });
 
-  revalidatePath(`/trips/${tripId}/packing-lists/${packingListId}`);
+  revalidatePath(`/trips/${item.tripId}/packing-lists/${item.packingListId}`);
 }
 
 export async function addPackingItemAction(
-  tripId: string,
   packingListId: string,
-  input: { name: string; quantity: number; categoryId?: string },
+  input: { name: string; quantity: number; categoryId?: string | null },
 ) {
+  const user = await requireUser();
+  const list = await assertListOwner(user.id, packingListId);
+  const data = ItemInputSchema.parse(input);
+  const categoryId = await resolveOwnedCategoryId(user.id, data.categoryId);
+
   const service = new ItemService();
-  await service.addItem(packingListId, {
-    name: input.name,
-    quantity: input.quantity,
-    categoryId:
-      input.categoryId && input.categoryId !== "" ? input.categoryId : null,
+  await service.addItem(list.id, {
+    name: data.name,
+    quantity: data.quantity,
+    categoryId,
     packed: false,
-    packingListId,
+    packingListId: list.id,
   });
-  revalidatePath(`/trips/${tripId}/packing-lists/${packingListId}`);
+  revalidatePath(`/trips/${list.tripId}/packing-lists/${list.id}`);
 }
 
 export async function updatePackingItemAction(
   itemId: string,
-  tripId: string,
-  packingListId: string,
-  data: { name: string; quantity: number; categoryId: string | null },
+  input: { name: string; quantity: number; categoryId: string | null },
 ) {
+  const user = await requireUser();
+  const item = await assertItemOwner(user.id, itemId);
+  const data = ItemInputSchema.parse(input);
+  const categoryId = await resolveOwnedCategoryId(user.id, data.categoryId);
+
   const service = new ItemService();
-  await service.updateItem(itemId, {
+  await service.updateItem(item.id, {
     name: data.name,
     quantity: data.quantity,
-    categoryId:
-      data.categoryId && data.categoryId !== "" ? data.categoryId : null,
+    categoryId,
   });
-  revalidatePath(`/trips/${tripId}/packing-lists/${packingListId}`);
+  revalidatePath(`/trips/${item.tripId}/packing-lists/${item.packingListId}`);
 }
 
-export async function createCategoryAction(
-  userId: string,
-  name: string,
-  tripId: string,
-  packingListId: string,
-) {
+export async function createCategoryAction(name: string, packingListId: string) {
+  const user = await requireUser();
+  const list = await assertListOwner(user.id, packingListId);
+  const categoryName = CategoryNameSchema.parse(name);
+
   const service = new CategoryService();
-  const existing = await service.getCategoryByName(userId, name);
-  if (existing) return formatOption(name, existing.id);
-  const newCategory = await service.createCategory(userId, name);
-  revalidatePath(`/trips/${tripId}/packing-lists/${packingListId}`);
-  return formatOption(name, newCategory.id);
+  const existing = await service.getCategoryByName(user.id, categoryName);
+  if (existing) return formatOption(categoryName, existing.id);
+  const newCategory = await service.createCategory(user.id, categoryName);
+  revalidatePath(`/trips/${list.tripId}/packing-lists/${list.id}`);
+  return formatOption(categoryName, newCategory.id);
 }
 
-export async function createTemplateAction(
-  userId: string,
-  packingListName: string,
-  packingListId: string,
-) {
+export async function createTemplateAction(packingListId: string) {
+  const user = await requireUser();
+  const list = await assertListOwner(user.id, packingListId);
+
+  const listService = new PackingListService();
+  const fullList = await listService.getPackingListById(list.id);
+  if (!fullList) return null;
+
   const service = new TemplateService();
-  const template = await service.createTemplate(
-    userId,
-    packingListId,
-    packingListName,
-  );
-  return template;
+  return service.createTemplate(user.id, list.id, fullList.name);
 }
 
-export async function exportPackingListToLink(
-  userId: string,
-  list: PackingList,
-) {
-  const tripService = new TripService();
-  const trip = await tripService.getTripById(userId, list.tripId);
-  if (trip) {
-    const { destination, startDate, endDate, notes } = trip;
-    const { name, items } = list;
+/**
+ * Creates a public share link for one of the signed-in user's lists.
+ * The snapshot is built from the database — never from client-supplied data —
+ * and stores category *names* only, not the sharer's internal category ids.
+ */
+export async function exportPackingListToLink(packingListId: string) {
+  const user = await requireUser();
+  const owned = await assertListOwner(user.id, packingListId);
 
-    const listService = new PackingListService();
-    return await listService.exportPackingList({
-      title: trip.name,
-      name,
-      destination,
-      startDate,
-      endDate,
-      notes: notes ?? "",
-      items,
-    });
-  }
+  const listService = new PackingListService();
+  const list = await listService.getPackingListById(owned.id);
+  if (!list) return null;
+
+  const { trip } = list;
+  return listService.exportPackingList({
+    title: trip.name,
+    name: list.name,
+    destination: trip.destination,
+    startDate: trip.startDate,
+    endDate: trip.endDate,
+    notes: trip.notes ?? "",
+    items: list.items.map((item) => ({
+      name: item.name,
+      quantity: item.quantity,
+      categoryName: item.category?.name ?? null,
+    })),
+  });
 }

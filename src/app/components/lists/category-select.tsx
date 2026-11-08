@@ -7,9 +7,7 @@ import { useState } from "react";
 import CreatableSelect from "react-select/creatable";
 
 export function CategorySelect({
-  userId,
   categories = [],
-  tripId,
   packingListId,
   onChange,
   value,
@@ -21,12 +19,7 @@ export function CategorySelect({
   const handleCreate = (inputValue: string) => {
     setIsLoading(true);
     setTimeout(async () => {
-      const newOption = await createCategoryAction(
-        userId,
-        inputValue,
-        tripId,
-        packingListId,
-      );
+      const newOption = await createCategoryAction(inputValue, packingListId);
       setIsLoading(false);
       setOptions((prev) => [...prev, newOption]);
       onChange(newOption);

@@ -18,8 +18,6 @@ export function UpdateUserInfoForm({ user }: { user: User }) {
     >
       <h2 className="text-xl font-semibold">Update Your Info</h2>
 
-      <input type="hidden" name="userId" value={user.id} />
-
       <div>
         <label className="block text-sm font-medium text-gray-700">Name</label>
         <input

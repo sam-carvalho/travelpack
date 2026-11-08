@@ -52,29 +52,4 @@ export class TemplateService {
       where: { id: templateId, userId },
     });
   }
-
-  // Applies a template to a trip by creating a new packing list
-  // with items from the template
-  async applyTemplateToTrip(templateId: string, tripId: string) {
-    const template = await prisma.template.findUnique({
-      where: { id: templateId },
-      include: { items: true },
-    });
-
-    if (!template) throw new Error("Template not found");
-
-    return prisma.packingList.create({
-      data: {
-        name: `From template: ${template.name}`,
-        tripId,
-        items: {
-          create: template.items.map((item) => ({
-            name: item.name,
-            category: item.categoryId,
-            quantity: item.quantity,
-          })),
-        },
-      },
-    });
-  }
 }

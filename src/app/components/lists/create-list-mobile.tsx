@@ -26,7 +26,7 @@ export function MobilePackingForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await addPackingItemAction(tripId, packingListId, {
+    await addPackingItemAction(packingListId, {
       name: itemName,
       quantity,
       categoryId,

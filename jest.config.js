@@ -1,6 +1,8 @@
 const { createDefaultPreset } = require("ts-jest");
 
-const tsJestTransformCfg = createDefaultPreset().transform;
+const tsJestTransformCfg = createDefaultPreset({
+  tsconfig: { jsx: "react-jsx" },
+}).transform;
 
 /** @type {import("jest").Config} **/
 module.exports = {
@@ -8,6 +10,7 @@ module.exports = {
   transform: {
     ...tsJestTransformCfg,
   },
+  testPathIgnorePatterns: ["/node_modules/", "<rootDir>/src/test-utils/"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },

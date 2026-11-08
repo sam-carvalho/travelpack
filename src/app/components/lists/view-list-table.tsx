@@ -40,7 +40,7 @@ export function PackingListTable({
 
     startTransition(async () => {
       try {
-        await deletePackingListItemAction(tripId, itemId, listId);
+        await deletePackingListItemAction(itemId);
         toast.success("Item deleted");
       } catch (err) {
         toast.error("Failed to delete item");

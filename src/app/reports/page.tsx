@@ -25,14 +25,12 @@ export default async function ReportsPage(props: {
   const searchParams = await props.searchParams;
   const keyword = searchParams?.keyword ?? "";
 
-  const reportData = await generatePackingReport(user.id, {
-    keyword,
-  });
+  const reportData = await generatePackingReport({ keyword });
 
   const [packingStats, topCategories, mostPackedItems] = await Promise.all([
-    getPackingStats(user.id),
-    getTopCategoriesData(user.id),
-    getMostPackedItemsData(user.id),
+    getPackingStats(),
+    getTopCategoriesData(),
+    getMostPackedItemsData(),
   ]);
 
   return (
@@ -42,11 +40,10 @@ export default async function ReportsPage(props: {
       {keyword && <PackingReportResult data={reportData} />}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch">
         <div className="w-full lg:w-1/2">
-          <TopCategoriesWidget userId={user.id} topCategories={topCategories} />
+          <TopCategoriesWidget topCategories={topCategories} />
         </div>
         <div className="w-full lg:w-1/2">
           <MostPackedItemsWidget
-            userId={user.id}
             mostPackedItems={mostPackedItems}
           />
         </div>

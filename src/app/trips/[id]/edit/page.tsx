@@ -39,7 +39,6 @@ export default async function EditTripPage({
       </div>
 
       <EditTripForm
-        userId={user.id}
         trip={{
           ...trip,
           startDate: new Date(trip.startDate).toISOString().split("T")[0],

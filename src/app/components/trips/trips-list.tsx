@@ -5,10 +5,8 @@ import { Trip } from "@/generated/prisma";
 import { DeleteTripButton } from "./delete-trip-button";
 
 export default async function TripsList({
-  userId,
   trips,
 }: {
-  userId: string;
   trips: Trip[];
 }) {
   if (trips.length === 0) {
@@ -54,7 +52,6 @@ export default async function TripsList({
                 Edit
               </Link>
               <DeleteTripButton
-                userId={userId}
                 tripId={trip.id}
                 deleteTripAction={deleteTripAction}
               />
@@ -114,7 +111,6 @@ export default async function TripsList({
                       Edit
                     </Link>
                     <DeleteTripButton
-                      userId={userId}
                       tripId={trip.id}
                       deleteTripAction={deleteTripAction}
                     />

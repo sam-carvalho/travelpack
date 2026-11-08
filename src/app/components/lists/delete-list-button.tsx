@@ -4,14 +4,12 @@ import { useRef } from "react";
 
 export function DeleteListButton({
   packingListId,
-  tripId,
   deletePackingListAction,
   label = "Delete",
   className,
 }: {
   packingListId: string;
-  tripId: string;
-  deletePackingListAction: (packingListId: string, tripId: string) => void;
+  deletePackingListAction: (packingListId: string) => void;
   label?: string;
   className?: string;
 }) {
@@ -20,7 +18,7 @@ export function DeleteListButton({
   return (
     <form
       ref={formRef}
-      action={deletePackingListAction.bind(null, packingListId, tripId)}
+      action={deletePackingListAction.bind(null, packingListId)}
       onSubmit={(e) => {
         if (!confirm("Are you sure you want to delete this packing list?")) {
           e.preventDefault();

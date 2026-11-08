@@ -55,7 +55,6 @@ export default async function PackingLists({
                       </Link>
                       <DeleteListButton
                         packingListId={list.id}
-                        tripId={list.tripId}
                         deletePackingListAction={deletePackingListAction}
                       />
                     </div>

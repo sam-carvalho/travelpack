@@ -33,7 +33,7 @@ export function AddPackingItemRow({
     e.preventDefault();
     setSubmitting(true);
     try {
-      await addPackingItemAction(tripId, packingListId, {
+      await addPackingItemAction(packingListId, {
         name: form.name,
         quantity: Number(form.quantity),
         categoryId: form.categoryId,

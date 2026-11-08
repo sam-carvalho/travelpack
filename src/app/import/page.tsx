@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/app/lib/auth";
 import { PackingListService } from "@/services/packing-list-service";
-import { importPackingList } from "./actions";
+import { importPackingList } from "./import-shared-list";
 
 export default async function ImportPage({
   searchParams,

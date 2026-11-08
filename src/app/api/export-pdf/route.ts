@@ -4,13 +4,29 @@ import { PackingListService } from "@/services/packing-list-service";
 import { PackingListPdf } from "@/app/components/lists/list-pdf";
 import React from "react";
 import { PackingListItem } from "@/app/lib/types";
+import { getCurrentUser } from "@/app/lib/auth";
+import { assertListOwner, NotFoundError } from "@/app/lib/authz";
+import { attachmentDisposition } from "@/app/utils/contentDisposition";
 
 export async function GET(req: NextRequest) {
+  // /api routes are excluded from the auth middleware, so authenticate here.
+  const user = await getCurrentUser();
+  if (!user) return new Response("Unauthorized", { status: 401 });
+
   const { searchParams } = new URL(req.url);
   const packingListId = searchParams.get("packingListId");
 
   if (!packingListId) {
     return new Response("Missing packingListId", { status: 400 });
+  }
+
+  try {
+    await assertListOwner(user.id, packingListId);
+  } catch (error) {
+    if (error instanceof NotFoundError) {
+      return new Response("Packing list not found", { status: 404 });
+    }
+    throw error;
   }
 
   const service = new PackingListService();
@@ -29,7 +45,7 @@ export async function GET(req: NextRequest) {
   return new Response(pdfBuffer, {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="${list.name}.pdf"`,
+      "Content-Disposition": attachmentDisposition(`${list.name}.pdf`),
     },
   });
 }

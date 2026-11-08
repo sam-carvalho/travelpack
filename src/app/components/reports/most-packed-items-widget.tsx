@@ -16,13 +16,11 @@ const COLORS = ["#3b82f6", "#0ea5e9", "#f97316", "#ec4899", "#a855f7"];
 
 export function MostPackedItemsWidget({
   mostPackedItems,
-  userId,
 }: {
   mostPackedItems: { name: string; count: number }[];
-  userId: string;
 }) {
   const handleDownload = async () => {
-    const blob = await generateMostPackedItemsReport(userId);
+    const blob = await generateMostPackedItemsReport();
 
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");

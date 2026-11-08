@@ -6,10 +6,8 @@ import { startTransition } from "react";
 import toast from "react-hot-toast";
 
 export function ManageTemplates({
-  userId,
   templates = [],
 }: {
-  userId: string;
   templates?: Template[];
 }) {
   const handleDelete = (templateId: string) => {
@@ -17,7 +15,7 @@ export function ManageTemplates({
 
     startTransition(async () => {
       try {
-        await deleteTemplateAction(userId, templateId);
+        await deleteTemplateAction(templateId);
         toast.success("Template deleted");
       } catch {
         toast.error("Failed to delete template");

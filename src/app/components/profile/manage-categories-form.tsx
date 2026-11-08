@@ -10,10 +10,8 @@ import {
 import { EditCategoryModal } from "./edit-category-modal";
 
 export function ManageUserCategoriesForm({
-  userId,
   categories = [],
 }: {
-  userId: string;
   categories?: Category[];
 }) {
   const [name, setName] = useState("");
@@ -27,7 +25,7 @@ export function ManageUserCategoriesForm({
     if (!name.trim()) return;
 
     startTransition(async () => {
-      const newCategory = await createCategoryAction(userId, name);
+      const newCategory = await createCategoryAction(name);
       setLocalCategories((prev) => [...prev, newCategory]);
       setName("");
     });
@@ -37,7 +35,7 @@ export function ManageUserCategoriesForm({
     if (!editingCategory) return;
 
     startTransition(async () => {
-      await updateCategoryAction(userId, editingCategory.id, newName);
+      await updateCategoryAction(editingCategory.id, newName);
       setLocalCategories((prev) =>
         prev.map((cat) =>
           cat.id === editingCategory.id ? { ...cat, name: newName } : cat,
@@ -51,7 +49,7 @@ export function ManageUserCategoriesForm({
     const confirmed = confirm("Are you sure you want to delete this item?");
     if (!confirmed) return;
     startTransition(async () => {
-      await deleteCategoryAction(userId, categoryId);
+      await deleteCategoryAction(categoryId);
       setLocalCategories((prev) => prev.filter((cat) => cat.id !== categoryId));
     });
   };

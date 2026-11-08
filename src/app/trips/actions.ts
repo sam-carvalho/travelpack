@@ -4,48 +4,46 @@ import { TripService } from "@/services/trip-service";
 import { revalidatePath } from "next/cache";
 import { CreateTripInput } from "@/app/lib/types";
 import { redirect } from "next/navigation";
+import { assertTripOwner, requireUser } from "@/app/lib/authz";
+import { TripInputSchema, TripUpdateSchema } from "@/app/lib/validation/inputs";
 
-export async function createTripAction(userId: string, input: CreateTripInput) {
-  const rawFormData = {
-    name: input.name,
-    destination: input.destination,
-    startDate: new Date(input.startDate),
-    endDate: new Date(input.endDate),
-    notes: input.notes || null,
-  };
+export async function createTripAction(input: CreateTripInput) {
+  const user = await requireUser();
+  const data = TripInputSchema.parse(input);
+
   const service = new TripService();
-  await service.createTrip(userId, rawFormData as CreateTripInput);
+  await service.createTrip(user.id, {
+    ...data,
+    notes: data.notes || undefined,
+  });
 
   revalidatePath("/trips");
   redirect("/trips");
 }
 
 export async function updateTripAction(
-  userId: string,
   tripId: string,
   updates: Partial<CreateTripInput>,
 ) {
-  const rawUpdates = {
-    name: updates.name,
-    destination: updates.destination,
-    startDate: updates.startDate,
-    endDate: updates.endDate,
-    notes: updates.notes,
-  };
-  const service = new TripService();
-  await service.updateTrip(
-    userId,
-    tripId,
-    rawUpdates as Partial<CreateTripInput>,
-  );
+  const user = await requireUser();
+  const trip = await assertTripOwner(user.id, tripId);
+  const data = TripUpdateSchema.parse(updates);
 
-  revalidatePath(`/trips/${tripId}`);
-  redirect(`/trips/${tripId}`);
+  const service = new TripService();
+  await service.updateTrip(user.id, trip.id, {
+    ...data,
+    notes: data.notes ?? undefined,
+  });
+
+  revalidatePath(`/trips/${trip.id}`);
+  redirect(`/trips/${trip.id}`);
 }
 
-export async function deleteTripAction(userId: string, tripId: string) {
+export async function deleteTripAction(tripId: string) {
+  const user = await requireUser();
+
   const service = new TripService();
-  await service.deleteTrip(userId, tripId);
+  await service.deleteTrip(user.id, tripId);
 
   revalidatePath("/trips");
   redirect("/trips");

@@ -24,7 +24,7 @@ export default async function TripsPage() {
           New Trip
         </Link>
       </div>
-      <TripsList userId={user.id} trips={trips} />
+      <TripsList trips={trips} />
     </div>
   );
 }

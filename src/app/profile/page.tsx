@@ -5,6 +5,7 @@ import { ManageUserCategoriesForm } from "@/app/components/profile/manage-catego
 import { CategoryService } from "@/services/category-service";
 import { TemplateService } from "@/services/template-service";
 import { ManageTemplates } from "../components/profile/manage-template";
+import { ExportData } from "@/app/components/profile/export-data";
 
 export default async function ProfilePage() {
   const user = await getCurrentUser();
@@ -27,11 +28,12 @@ export default async function ProfilePage() {
 
       <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
         <UpdateUserInfoForm user={user} />
-        <ManageUserCategoriesForm userId={user.id} categories={categories} />
+        <ManageUserCategoriesForm categories={categories} />
       </div>
 
       <div className="grid grid-cols-1 gap-2 pb-20 md:grid-cols-2">
-        <ManageTemplates userId={user.id} templates={templates} />
+        <ManageTemplates templates={templates} />
+        <ExportData />
       </div>
     </div>
   );

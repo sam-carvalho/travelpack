@@ -8,13 +8,11 @@ const COLORS = ["#3b82f6", "#0ea5e9", "#f97316", "#ec4899"];
 
 export function TopCategoriesWidget({
   topCategories,
-  userId,
 }: {
   topCategories: { name: string; count: number }[];
-  userId: string;
 }) {
   const handleDownload = async () => {
-    const blob = await generateTopCategoriesReport(userId);
+    const blob = await generateTopCategoriesReport();
 
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");

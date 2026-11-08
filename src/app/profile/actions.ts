@@ -3,23 +3,32 @@
 import { CategoryService } from "@/services/category-service";
 import { TemplateService } from "@/services/template-service";
 import { UserService } from "@/services/user-service";
+import prisma from "@/app/lib/prisma";
+import { requireUser } from "@/app/lib/authz";
+import { SignupFormSchema } from "@/app/lib/definitions";
+import { CategoryNameSchema } from "@/app/lib/validation/inputs";
 import { hash } from "bcrypt";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 const schema = z.object({
-  name: z.string().min(1),
-  email: z.string().email(),
-  password: z.string().min(6).optional().or(z.literal("")),
+  name: z.string().trim().min(1).max(100),
+  email: z.string().trim().email(),
+  // Same strength rules as sign-up when a new password is set.
+  password: SignupFormSchema.shape.password.optional().or(z.literal("")),
   confirmPassword: z.string().optional(),
 });
 
+// The user being updated is always the signed-in user. Any "userId" sent by
+// the client is ignored.
 export async function updateUserInfoAction(_: unknown, formData: FormData) {
+  const user = await requireUser();
+
   const result = schema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
-    password: formData.get("password"),
-    confirmPassword: formData.get("confirmPassword"),
+    password: formData.get("password") ?? "",
+    confirmPassword: formData.get("confirmPassword") ?? "",
   });
 
   if (!result.success) {
@@ -28,14 +37,19 @@ export async function updateUserInfoAction(_: unknown, formData: FormData) {
 
   const { name, email, password, confirmPassword } = result.data;
 
-  if (password && confirmPassword && password !== confirmPassword) {
+  if (password && password !== confirmPassword) {
     return { errors: { confirmPassword: ["Passwords do not match"] } };
   }
 
-  const userId = formData.get("userId") as string;
+  if (email !== user.email) {
+    const taken = await prisma.user.findUnique({ where: { email } });
+    if (taken) {
+      return { errors: { email: ["Email already in use"] } };
+    }
+  }
 
   const service = new UserService();
-  service.updateUser(userId, {
+  await service.updateUser(user.id, {
     name,
     email,
     ...(password ? { password: await hash(password, 10) } : {}),
@@ -46,41 +60,51 @@ export async function updateUserInfoAction(_: unknown, formData: FormData) {
   return { success: true };
 }
 
-export async function createCategoryAction(userId: string, name: string) {
+export async function createCategoryAction(name: string) {
+  const user = await requireUser();
+  const categoryName = CategoryNameSchema.parse(name);
+
   const service = new CategoryService();
-  const newCategory = await service.createCategory(userId, name);
+  const newCategory = await service.createCategory(user.id, categoryName);
 
   revalidatePath("/profile");
 
   return {
     id: newCategory.id,
     name: newCategory.name,
-    userId,
+    userId: user.id,
   };
 }
 
-export async function updateCategoryAction(
-  userId: string,
-  categoryId: string,
-  newName: string,
-) {
+export async function updateCategoryAction(categoryId: string, newName: string) {
+  const user = await requireUser();
+  const categoryName = CategoryNameSchema.parse(newName);
+
   const service = new CategoryService();
-  const updated = await service.updateCategory(userId, categoryId, newName);
+  const updated = await service.updateCategory(
+    user.id,
+    categoryId,
+    categoryName,
+  );
 
   if (updated.count === 0) throw new Error("Update failed");
-  return { id: categoryId, name: newName };
+  return { id: categoryId, name: categoryName };
 }
 
-export async function deleteCategoryAction(userId: string, categoryId: string) {
+export async function deleteCategoryAction(categoryId: string) {
+  const user = await requireUser();
+
   const service = new CategoryService();
-  await service.deleteCategory(userId, categoryId);
+  await service.deleteCategory(user.id, categoryId);
 
   revalidatePath("/profile");
 }
 
-export async function deleteTemplateAction(userId: string, templateId: string) {
+export async function deleteTemplateAction(templateId: string) {
+  const user = await requireUser();
+
   const service = new TemplateService();
-  await service.deleteTemplate(userId, templateId);
+  await service.deleteTemplate(user.id, templateId);
 
   revalidatePath("/profile");
 }

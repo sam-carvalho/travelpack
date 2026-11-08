@@ -9,7 +9,7 @@ import { updateTripAction } from "@/app/trips/actions";
 
 type FormData = z.infer<typeof updateTripSchema>;
 
-export function EditTripForm({ userId, trip }: { userId: string; trip: Trip }) {
+export function EditTripForm({ trip }: { trip: Trip }) {
   const [form, setForm] = useState<FormData>({
     name: trip.name || "",
     destination: trip.destination || "",
@@ -27,7 +27,7 @@ export function EditTripForm({ userId, trip }: { userId: string; trip: Trip }) {
     e.preventDefault();
     try {
       const validatedFormData = updateTripSchema.parse(form);
-      updateTripAction(userId, trip.id, {
+      updateTripAction(trip.id, {
         ...validatedFormData,
         startDate: validatedFormData.startDate
           ? new Date(validatedFormData.startDate)
