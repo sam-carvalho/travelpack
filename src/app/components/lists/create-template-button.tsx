@@ -5,23 +5,15 @@ import { useTransition } from "react";
 import toast from "react-hot-toast";
 
 export function CreateTemplateButton({
-  userId,
   packingListId,
-  packingListName,
 }: {
-  userId: string;
   packingListId: string;
-  packingListName: string;
 }) {
   const [isPending, startTransition] = useTransition();
 
   const handleClick = () => {
     startTransition(async () => {
-      const template = await createTemplateAction(
-        userId,
-        packingListName,
-        packingListId,
-      );
+      const template = await createTemplateAction(packingListId);
       if (template) toast.success("Template created!");
     });
   };

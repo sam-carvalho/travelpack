@@ -1,16 +1,13 @@
 "use client";
 
 import { exportPackingListToLink } from "@/app/trips/[id]/packing-lists/actions";
-import { PackingList } from "@/generated/prisma";
 import { useTransition } from "react";
 import toast from "react-hot-toast";
 
 export function ExportShareLinkButton({
-  userId,
-  list,
+  packingListId,
 }: {
-  userId: string;
-  list: PackingList;
+  packingListId: string;
 }) {
   const [isPending, startTransition] = useTransition();
 
@@ -19,7 +16,7 @@ export function ExportShareLinkButton({
       const toastId = toast.loading("Generating shareable link...");
 
       try {
-        const url = await exportPackingListToLink(userId, list);
+        const url = await exportPackingListToLink(packingListId);
         await navigator.clipboard.writeText(url ?? "");
         toast.success("Link copied to clipboard!", { id: toastId });
       } catch (error) {

@@ -50,11 +50,7 @@ export default async function ViewPackingListPage({
           <h1 className="text-2xl font-medium">{list.name}</h1>
         </div>
         <div className="flex items-center space-x-4">
-          <CreateTemplateButton
-            userId={user.id}
-            packingListId={listId}
-            packingListName={list.name}
-          />
+          <CreateTemplateButton packingListId={list.id} />
         </div>
       </div>
       <PackingListTable
@@ -66,7 +62,7 @@ export default async function ViewPackingListPage({
       />
       <div className="flex items-center justify-between gap-4 px-12 pb-12">
         <div className="flex gap-4 bg-gray-50">
-          <ExportShareLinkButton userId={user.id} list={list} />
+          <ExportShareLinkButton packingListId={list.id} />
           <ExportPDFButton
             packingListId={list.id}
             packingListName={list.name}
@@ -75,7 +71,6 @@ export default async function ViewPackingListPage({
         <div className="flex justify-end bg-gray-50">
           <DeleteListButton
             packingListId={list.id}
-            tripId={list.tripId}
             deletePackingListAction={deletePackingListAction}
             label="Delete Packing List"
             className="h-14 cursor-pointer rounded-md border border-red-300 px-3 py-2 text-sm text-red-600 hover:bg-red-50 md:h-10"

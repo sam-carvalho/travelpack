@@ -6,10 +6,8 @@ import toast from "react-hot-toast";
 import { deleteTemplateAction } from "@/app/profile/actions";
 
 export function DeleteTemplateButton({
-  userId,
   templateId,
 }: {
-  userId: string;
   templateId: string;
 }) {
   const [isPending, startTransition] = useTransition();
@@ -20,7 +18,7 @@ export function DeleteTemplateButton({
 
     startTransition(async () => {
       try {
-        await deleteTemplateAction(userId, templateId);
+        await deleteTemplateAction(templateId);
         toast.success("Template deleted");
         router.refresh();
       } catch {

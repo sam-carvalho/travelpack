@@ -23,7 +23,7 @@ export default async function NewTripPage() {
           <h2 className="text-2xl font-medium">Create a New Trip</h2>
         </div>
       </div>
-      <CreateTripForm userId={user.id} />
+      <CreateTripForm />
     </div>
   );
 }

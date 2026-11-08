@@ -78,7 +78,6 @@ export default async function ViewTripPage({
           Edit
         </Link>
         <DeleteTripButton
-          userId={user.id}
           tripId={trip.id}
           deleteTripAction={deleteTripAction}
         />

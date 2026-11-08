@@ -8,7 +8,7 @@ import { createTripAction } from "@/app/trips/actions";
 
 type FormData = z.infer<typeof createTripSchema>;
 
-export function CreateTripForm({ userId }: { userId: string }) {
+export function CreateTripForm() {
   const [form, setForm] = useState<FormData>({
     name: "",
     destination: "",
@@ -27,7 +27,7 @@ export function CreateTripForm({ userId }: { userId: string }) {
     setError(null);
     try {
       const validatedFormData = createTripSchema.parse(form);
-      createTripAction(userId, {
+      createTripAction({
         ...validatedFormData,
         startDate: new Date(validatedFormData.startDate),
         endDate: new Date(validatedFormData.endDate),

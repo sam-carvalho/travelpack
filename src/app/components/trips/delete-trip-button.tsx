@@ -3,20 +3,18 @@
 import { useRef } from "react";
 
 export function DeleteTripButton({
-  userId,
   tripId,
   deleteTripAction,
 }: {
-  userId: string;
   tripId: string;
-  deleteTripAction: (userId: string, tripId: string) => void;
+  deleteTripAction: (tripId: string) => void;
 }) {
   const formRef = useRef<HTMLFormElement>(null);
 
   return (
     <form
       ref={formRef}
-      action={deleteTripAction.bind(null, userId, tripId)}
+      action={deleteTripAction.bind(null, tripId)}
       onSubmit={(e) => {
         if (!confirm("Are you sure you want to delete this trip?")) {
           e.preventDefault();
