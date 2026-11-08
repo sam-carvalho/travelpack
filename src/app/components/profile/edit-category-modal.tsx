@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 export function EditCategoryModal({
@@ -16,12 +16,6 @@ export function EditCategoryModal({
   initialName: string;
 }) {
   const [newName, setNewName] = useState(initialName);
-
-  useEffect(() => {
-    if (isOpen) {
-      setNewName(initialName);
-    }
-  }, [isOpen, initialName]);
 
   const handleSave = () => {
     if (!newName.trim()) return;

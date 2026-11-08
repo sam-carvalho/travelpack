@@ -107,6 +107,7 @@ export function ManageUserCategoriesForm({
             </li>
           ))}
           <EditCategoryModal
+            key={editingCategory?.id ?? "closed"}
             isOpen={!!editingCategory}
             initialName={editingCategory?.name || ""}
             onClose={() => setEditingCategory(null)}

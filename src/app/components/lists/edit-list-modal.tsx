@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { PackingListItem, Category, Option } from "@/app/lib/types";
 import { updatePackingItemAction } from "@/app/trips/[id]/packing-lists/actions";
 import toast from "react-hot-toast";
@@ -29,19 +29,9 @@ export function EditPackingItemModal({
   const [quantity, setQuantity] = useState(item.quantity);
   const [categoryId, setCategoryId] = useState(item.categoryId ?? "");
   const categoryOptions = buildOptions(categories);
-  const [selectedCategory, setSelectedCategory] = useState<Option | null>(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      setName(item.name);
-      setQuantity(item.quantity);
-      setCategoryId(item.categoryId ?? "");
-      setSelectedCategory(
-        categoryOptions.find((opt) => opt.value === item.categoryId) ?? null,
-      );
-    }
-    /* eslint-disable react-hooks/exhaustive-deps */
-  }, []);
+  const [selectedCategory, setSelectedCategory] = useState<Option | null>(
+    () => categoryOptions.find((opt) => opt.value === item.categoryId) ?? null,
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
