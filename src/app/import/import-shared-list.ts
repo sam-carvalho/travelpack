@@ -5,14 +5,11 @@ import { TripService } from "@/services/trip-service";
 import { CategoryService } from "@/services/category-service";
 import { SharedItemsSchema } from "@/app/lib/validation/inputs";
 
-// Server-only helper (deliberately NOT a "use server" action): it is called by
-// the import page with the session user's id, so it must never be exposed as a
-// client-callable endpoint that accepts an arbitrary userId.
+// Not a server action on purpose: it trusts the userId it is given.
 export async function importPackingList(
   userId: string,
   sharedList: SharedPackingList,
 ) {
-  // The snapshot is untrusted, user-generated JSON — validate before use.
   const parsed = SharedItemsSchema.safeParse(sharedList.items);
   const sharedItems = parsed.success ? parsed.data : [];
 
@@ -31,8 +28,7 @@ export async function importPackingList(
     tripId: trip.id,
   });
 
-  // Map categories by name into the importing user's own categories, instead
-  // of copying the sharer's category ids across accounts.
+  // Match by name so the sharer's category ids never cross accounts.
   const categoryService = new CategoryService();
   const categoryIds = new Map<string, string>();
   for (const item of sharedItems) {

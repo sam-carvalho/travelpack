@@ -209,11 +209,6 @@ export async function createTemplateAction(packingListId: string) {
   return service.createTemplate(user.id, list.id, fullList.name);
 }
 
-/**
- * Creates a public share link for one of the signed-in user's lists.
- * The snapshot is built from the database — never from client-supplied data —
- * and stores category *names* only, not the sharer's internal category ids.
- */
 export async function exportPackingListToLink(packingListId: string) {
   const user = await requireUser();
   const owned = await assertListOwner(user.id, packingListId);

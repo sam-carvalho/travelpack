@@ -1,9 +1,4 @@
-/**
- * Builds a safe `Content-Disposition: attachment` header for a user-chosen
- * file name. Quotes, control characters and other header-breaking characters
- * are stripped from the ASCII fallback; the full name is kept in the RFC 5987
- * `filename*` parameter.
- */
+// ASCII-safe fallback name plus the full name in RFC 5987 `filename*`.
 export function attachmentDisposition(fileName: string): string {
   const cleaned = fileName.replace(/[\u0000-\u001f\u007f]/g, "").trim();
   const fallback =

@@ -1,6 +1,3 @@
-// Shared jest mock for "@/app/lib/prisma". Use in tests with:
-//   jest.mock("@/app/lib/prisma", () => require("@/test-utils/prisma-mock"));
-// and call resetPrismaMock() in beforeEach.
 const methods = [
   "findFirst",
   "findUnique",

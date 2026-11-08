@@ -14,13 +14,10 @@ import { z } from "zod";
 const schema = z.object({
   name: z.string().trim().min(1).max(100),
   email: z.string().trim().email(),
-  // Same strength rules as sign-up when a new password is set.
   password: SignupFormSchema.shape.password.optional().or(z.literal("")),
   confirmPassword: z.string().optional(),
 });
 
-// The user being updated is always the signed-in user. Any "userId" sent by
-// the client is ignored.
 export async function updateUserInfoAction(_: unknown, formData: FormData) {
   const user = await requireUser();
 

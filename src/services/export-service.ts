@@ -1,14 +1,6 @@
 import prisma from "@/app/lib/prisma";
 
-/**
- * TravelPack data export, schema v1.
- *
- * A self-contained JSON document (file extension `.travelpack`) holding one
- * user's trips, packing lists, items, categories and templates. The iOS app
- * imports this format, and it is intended to become the data format of a
- * future sync API. Category ids inside the file only refer to entries in the
- * file's own `categories` array.
- */
+// `.travelpack` schema v1, shared with the iOS app.
 export interface TravelPackExportV1 {
   format: "travelpack";
   schemaVersion: 1;
@@ -83,13 +75,11 @@ interface ExportSource {
   }[];
 }
 
-/** Pure mapping from database rows to the v1 export document. */
 export function toExportDocument(
   source: ExportSource,
   now: Date = new Date(),
 ): TravelPackExportV1 {
   const ownCategoryIds = new Set(source.categories.map((c) => c.id));
-  // Never emit a category reference that isn't part of this export.
   const categoryRef = (id: string | null) =>
     id && ownCategoryIds.has(id) ? id : null;
 
@@ -134,7 +124,6 @@ export function toExportDocument(
 }
 
 export class ExportService {
-  /** Loads everything owned by `userId` — and nothing else. */
   async exportUserData(userId: string): Promise<TravelPackExportV1> {
     const [categories, trips, templates] = await Promise.all([
       prisma.category.findMany({

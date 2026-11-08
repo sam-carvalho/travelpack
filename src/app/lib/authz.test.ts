@@ -1,8 +1,3 @@
-/**
- * Authorization tests for server actions. Server actions are public endpoints,
- * so every test here simulates a signed-in user ("user-a") trying to act on
- * records or accounts that belong to someone else ("user-b").
- */
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 jest.mock("@/app/lib/prisma", () => require("@/test-utils/prisma-mock"));
 jest.mock("@/app/lib/auth", () => ({ getCurrentUser: jest.fn() }));

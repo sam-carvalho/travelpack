@@ -9,7 +9,6 @@ import { assertListOwner, NotFoundError } from "@/app/lib/authz";
 import { attachmentDisposition } from "@/app/utils/contentDisposition";
 
 export async function GET(req: NextRequest) {
-  // /api routes are excluded from the auth middleware, so authenticate here.
   const user = await getCurrentUser();
   if (!user) return new Response("Unauthorized", { status: 401 });
 

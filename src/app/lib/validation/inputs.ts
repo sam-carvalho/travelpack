@@ -1,8 +1,5 @@
 import { z } from "zod";
 
-// Server-side validation for server action inputs. Client-side checks are only
-// a convenience — every action re-validates what it receives here.
-
 export const ItemInputSchema = z.object({
   name: z.string().trim().min(1, "Item name is required").max(100),
   quantity: z.coerce.number().int().min(1).max(999),
@@ -38,9 +35,7 @@ export const TripUpdateSchema = z
     message: "End date must be after start date",
   });
 
-// Shape of the item snapshot stored in SharedPackingList.items. Older links
-// stored full item rows (with the sharer's categoryId); newer ones store only
-// the category name. Either way, only these fields are ever read back.
+// Older share links stored full item rows; newer ones store categoryName.
 export const SharedItemsSchema = z
   .array(
     z.object({

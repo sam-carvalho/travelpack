@@ -7,8 +7,6 @@ import { TopCategoriesReportPDF } from "@/app/components/reports/top-category-pd
 import { MostPackedItemsReportPDF } from "../components/reports/most-packed-items-pdf";
 import { requireUser } from "@/app/lib/authz";
 
-// Every report is scoped to the signed-in user; callers cannot pass a user id.
-
 export async function generatePackingReport(formData: { keyword: string }) {
   const user = await requireUser();
   const report = new PackingActivityReport();

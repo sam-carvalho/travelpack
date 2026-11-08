@@ -3,15 +3,6 @@ import { z } from "zod";
 import prisma from "@/app/lib/prisma";
 import { getCurrentUser } from "@/app/lib/auth";
 
-/**
- * Authorization helpers for server actions and route handlers.
- *
- * Server actions are public HTTP endpoints: any argument a client passes
- * (user ids, trip ids, item ids...) can be forged. Never accept a user id
- * from the client — always derive it from the session with `requireUser()`,
- * then prove ownership of every record id with the `assert*Owner` helpers.
- */
-
 export class NotFoundError extends Error {
   constructor(message = "Not found") {
     super(message);
@@ -19,16 +10,13 @@ export class NotFoundError extends Error {
   }
 }
 
-/** Returns the signed-in user, or redirects to the sign-in page. */
 export async function requireUser() {
   const user = await getCurrentUser();
   if (!user) redirect("/signin");
   return user;
 }
 
-// Records that don't exist and records owned by someone else return the same
-// error, so callers can't probe which ids exist.
-
+// Missing and not-owned records throw the same error so ids can't be probed.
 export async function assertTripOwner(userId: string, tripId: unknown) {
   const id = z.uuid().safeParse(tripId);
   if (!id.success) throw new NotFoundError("Trip not found");
@@ -81,7 +69,6 @@ export async function assertCategoryOwner(userId: string, categoryId: unknown) {
   return category;
 }
 
-/** Normalises an optional category id and checks the user owns it. */
 export async function resolveOwnedCategoryId(
   userId: string,
   categoryId: string | null | undefined,
